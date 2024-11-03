@@ -5,6 +5,7 @@ description = ""
 authors = ["Aran Moncusí Ramírez <aran@digitalpoet.info>"]
 license = "AGPL3.0"
 readme = "README.md"
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
