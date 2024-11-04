@@ -17,12 +17,11 @@ ci-test:
 	# Issue: https://github.com/testcontainers/testcontainers-python/issues/475
 	poetry run pytest --cov-report xml:report/coverage.xml --cov=$(SOURCE_DIR) --junit-xml=report/test.xml "$(TEST_DIR)/unittests/"
 
-
-.PHONY: info
-info:
-	@echo "${PROJECT_NAME};${PROJECT_VERSION};${PYTHON_VERSION}"
-
 .PHONY: pre-commit lint
 lint: pre-commit
 pre-commit:
 	pre-commit run --all-files
+
+.PHONY: info
+info:
+	@echo "${PROJECT_NAME};${PROJECT_VERSION};${PYTHON_VERSION}"
