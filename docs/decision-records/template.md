@@ -1,5 +1,10 @@
 # {{ name }} - {{ date }} #
 
+## Revisions
+
+- {{ date }}: Initial draft
+  - Aran Moncusi Ramirez
+
 ## Context
 CHANGEME
 
