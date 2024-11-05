@@ -25,3 +25,7 @@ pre-commit:
 .PHONY: info
 info:
 	@echo "${PROJECT_NAME};${PROJECT_VERSION};${PYTHON_VERSION}"
+
+.PHONY: run-api
+run-api:
+	fastapi dev --app api 'src/app/api_instance.py'
