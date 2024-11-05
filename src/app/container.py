@@ -1,7 +1,7 @@
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
-from module.container import ModuleContainer
+from src.module.container import ModuleContainer
 
 
 class MainContainer(DeclarativeContainer):

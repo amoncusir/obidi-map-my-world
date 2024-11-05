@@ -1,10 +1,10 @@
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
-from module.common.container import CommonContainer
-from module.geoquerier.container import GeoQuerierContainer
-from module.placemanager.container import PlaceManagerContainer
-from module.recommendation.container import RecommendationContainer
+from src.module.common.container import CommonContainer
+from src.module.geoquerier.container import GeoQuerierContainer
+from src.module.placemanager.container import PlaceManagerContainer
+from src.module.recommendation.container import RecommendationContainer
 
 
 class ModuleContainer(DeclarativeContainer):
