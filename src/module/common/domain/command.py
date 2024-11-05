@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from datetime import datetime
 from logging import Logger, getLogger
-from typing import Generic, TypeVar
+from typing import Type, TypeVar
 
 from pydantic import BaseModel, ConfigDict
 
@@ -38,3 +38,7 @@ class CommandHandler[CommandType]:
 
     @abstractmethod
     def process_command(self, command: CommandType): ...
+
+    @classmethod
+    @abstractmethod
+    def command_type(cls) -> Type[CommandType]: ...
