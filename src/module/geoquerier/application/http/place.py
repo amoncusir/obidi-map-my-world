@@ -19,6 +19,7 @@ class PlaceResponse(BaseModel):
 
 class FindCriteria(QueryParams):
     rectangle: Tuple[float, float, float, float] = Field(
+        alias="by_rect",
         description="ABCD Rectangle coordinates to perform a geospatial search. "
         "Index (0, 1) represents the latitude and longitude of the A vertex, and "
         "(2, 3) represents the latitude and longitude of the C vertex.",
