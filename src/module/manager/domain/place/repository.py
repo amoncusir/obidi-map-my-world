@@ -1,4 +1,4 @@
-from src.module.common.domain.place import Place
+from src.module.manager.domain.place import Place
 
 
 class PlaceRepository:

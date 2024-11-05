@@ -1,4 +1,4 @@
-from src.module.common.domain.category.category import Category
+from src.module.manager.domain.category.category import Category
 
 
 class CategoryRepository:

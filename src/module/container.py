@@ -3,7 +3,7 @@ from dependency_injector.containers import DeclarativeContainer
 
 from src.module.common.container import CommonContainer
 from src.module.geoquerier.container import GeoQuerierContainer
-from src.module.placemanager.container import PlaceManagerContainer
+from src.module.manager.container import ManagerContainer
 from src.module.recommendation.container import RecommendationContainer
 
 
@@ -14,6 +14,6 @@ class ModuleContainer(DeclarativeContainer):
 
     geo_querier_container = providers.Container(GeoQuerierContainer, config=config.geo_querier)
 
-    place_manager_container = providers.Container(PlaceManagerContainer, config=config.place_manager)
+    manager_container = providers.Container(ManagerContainer, config=config.manager)
 
     recommendation_container = providers.Container(RecommendationContainer, config=config.recommendation)

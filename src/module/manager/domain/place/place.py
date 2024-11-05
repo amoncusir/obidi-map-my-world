@@ -5,9 +5,9 @@ from pydantic import Field
 from typing_extensions import TypeVar
 
 from src.module.common.domain.aggregates import AggregateRoot
-from src.module.common.domain.category import Category
 from src.module.common.domain.entities import DomainEntity
 from src.module.common.domain.values import GenericUUID, Location
+from src.module.manager.domain.category import Category
 
 ReviewID = TypeVar("ReviewID", bound=uuid.UUID)
 
