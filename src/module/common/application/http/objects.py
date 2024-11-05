@@ -6,6 +6,10 @@ T = TypeVar("T")
 K = TypeVar("K")
 
 
+class QueryParams(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+
 class PaginatedResponse(BaseModel, Generic[T, K]):
     model_config = ConfigDict(frozen=True)
 
