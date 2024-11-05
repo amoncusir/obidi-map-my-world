@@ -17,7 +17,7 @@ class Command(BaseModel):
 CommandType = TypeVar("CommandType", bound=Command)
 
 
-class CommandHandler(Generic[CommandType]):
+class CommandHandler[CommandType]:
 
     log: Logger
 
