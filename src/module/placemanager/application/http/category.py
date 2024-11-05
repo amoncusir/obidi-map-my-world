@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.params import Query
 from pydantic import BaseModel, ConfigDict, Field
 
-from module.common.application.http import PaginatedResponse, QueryParams
+from src.module.common.application.http import PaginatedResponse, QueryParams
 
 router = APIRouter(prefix="/categories", tags=["category"])
 
@@ -20,7 +20,9 @@ class CategoryPagination(QueryParams):
 
 
 @router.get("/")
-async def get_all_categories(query: Annotated[CategoryPagination, Query()]) -> PaginatedResponse[CategoryResponse]: ...
+async def get_all_categories(
+    query: Annotated[CategoryPagination, Query()]
+) -> PaginatedResponse[CategoryResponse, str]: ...
 
 
 class CreateCategory(BaseModel):

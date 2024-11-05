@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from fastapi.params import Query
 from pydantic import BaseModel, ConfigDict, Field
 
-from module.common.application.http import QueryParams
+from src.module.common.application.http import QueryParams
 
 router = APIRouter(prefix="/recommend", tags=["recommendation"])
 

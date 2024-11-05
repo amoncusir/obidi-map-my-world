@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.params import Query
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
-from module.common.application.http import QueryParams
+from src.module.common.application.http import QueryParams
 
 router = APIRouter(prefix="/places", tags=["place"])
 
