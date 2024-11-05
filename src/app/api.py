@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
-from app.router import router
+from src.app.router import router
 
 
 def build_fastapi() -> FastAPI:
 
-    api = FastAPI()
+    api = FastAPI(title="OrbidiMapMyWorld")
 
     api.include_router(router)
 
