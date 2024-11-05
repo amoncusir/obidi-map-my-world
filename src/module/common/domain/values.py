@@ -25,5 +25,5 @@ class GenericUUID(uuid.UUID):
 class Location(BaseModel):
     model_config = ConfigDict(frozen=True)
 
-    latitude: float = Field(..., alias="lat")
-    longitude: float = Field(..., alias="lon")
+    latitude: float = Field(..., alias="lat", allow_inf_nan=False, ge=-90.0, le=90.0)
+    longitude: float = Field(..., alias="lon", allow_inf_nan=False, ge=-180.0, le=180.0)
