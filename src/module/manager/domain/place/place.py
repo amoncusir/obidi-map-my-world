@@ -16,7 +16,7 @@ ReviewID = TypeVar("ReviewID", bound=uuid.UUID)
 
 class Review(DomainEntity[ReviewID]):
     id: ReviewID = Field(default_factory=GenericUUID.next_id, kw_only=True)
-    rate: int
+    rate: int = Field(ge=0, le=5)
 
 
 PlaceID = TypeVar("PlaceID", bound=str)

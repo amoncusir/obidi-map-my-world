@@ -3,6 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from src.app import application
 from src.module.common.domain.values import Location
+from src.module.manager.domain.command.add_review_on_place import AddReviewOnPlace
 from src.module.manager.domain.command.create_place import (
     CreatePlace,
     CreatePlaceResult,
@@ -45,10 +46,17 @@ async def create_place(place: CreatePlaceRequest) -> CreatePlaceResponse:
 
 class CreateReview(BaseModel):
     model_config = ConfigDict(frozen=True)
-    rate: int = Field(description="Rate of review", ge=0, le=5)
+    rate: int = Field(description="Rate of review", allow_inf_nan=False)
 
 
 @router.post("/{place_id}/review", status_code=201)
 async def review_place(place_id: str, review: CreateReview):
     app = application()
     bus = app.command_bus
+
+    command = AddReviewOnPlace(
+        place_id=place_id,
+        rate=review.rate,
+    )
+
+    await bus.exec(command)
