@@ -1,13 +1,31 @@
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
+from src.config.mongodb import MongoDBSettings
+from src.module.common.infrastructure import mongodb
 from src.module.container import ModuleContainer
 
 
+class MongoContainer(DeclarativeContainer):
+    config = providers.Configuration()
+
+    settings = providers.Singleton(MongoDBSettings, url=config.url.required(), database=config.database)
+
+    client = providers.Factory(mongodb.build_client, settings=settings)
+
+    database = providers.Factory(mongodb.get_database, client=client)
+
+
 class MainContainer(DeclarativeContainer):
-    config = providers.Configuration(strict=True)
+    config = providers.Configuration()
+
+    mongodb = providers.Container(
+        MongoContainer,
+        config=config.mongodb,
+    )
 
     module_container = providers.Container(
         ModuleContainer,
         config=config.module,
+        database=mongodb.database,
     )
