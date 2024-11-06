@@ -1,23 +1,46 @@
 from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.app import application
+from src.module.common.domain.values import Location
+from src.module.manager.domain.command.create_place import (
+    CreatePlace,
+    CreatePlaceResult,
+)
+
 router = APIRouter(prefix="/places", tags=["place"])
 
 
-class CreatePlace(BaseModel):
+class CreatePlaceRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
     latitude: float = Field(alias="lat", allow_inf_nan=False, ge=-90.0, le=90.0)
     longitude: float = Field(alias="lon", allow_inf_nan=False, ge=-180.0, le=180.0)
-    category: str = Field(description="Category ID")
+    category_id: str = Field(description="Category ID")
+    name: str = Field()
 
 
 class CreatePlaceResponse(BaseModel):
     model_config = ConfigDict(frozen=True)
-    id: str = Field(description="Generated ID")
+    id: str = Field(description="Place ID")
 
 
 @router.post("")
-async def create_place(place: CreatePlace) -> CreatePlaceResponse: ...
+async def create_place(place: CreatePlaceRequest) -> CreatePlaceResponse:
+    app = application()
+    bus = app.command_bus
+
+    command = CreatePlace(
+        place_name=place.name,
+        category_id=place.category_id,
+        location=Location(
+            lat=place.latitude,
+            lon=place.longitude,
+        ),
+    )
+
+    result: CreatePlaceResult = await bus.exec(command)
+
+    return CreatePlaceResponse(id=result.place_id)
 
 
 class CreateReview(BaseModel):
@@ -26,4 +49,6 @@ class CreateReview(BaseModel):
 
 
 @router.post("/{place_id}/review", status_code=201)
-async def review_place(place_id: str, review: CreateReview): ...
+async def review_place(place_id: str, review: CreateReview):
+    app = application()
+    bus = app.command_bus
