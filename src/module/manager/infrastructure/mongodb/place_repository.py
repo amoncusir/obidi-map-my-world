@@ -8,6 +8,7 @@ from pymongo.database import Database
 
 from src.module.common.domain.values import GenericUUID, Location
 from src.module.common.infrastructure.mongodb import GeoJson, ValidatedObjectId
+from src.module.common.infrastructure.mongodb.document import InternalDocument
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import Review
 from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
@@ -53,8 +54,7 @@ class ReviewDTO(BaseModel):
         )
 
 
-class PlaceDTO(BaseModel):
-    id: Optional[ValidatedObjectId] = Field(alias="_id")
+class PlaceDTO(InternalDocument[Place]):
     created_at: datetime
     updated_at: datetime
     name: str
@@ -62,18 +62,18 @@ class PlaceDTO(BaseModel):
     category: CategoryDTO
     reviews: List[ReviewDTO]
 
-    @staticmethod
-    def from_domain(place: Place) -> "PlaceDTO":
-        oid = ObjectId(place.id) if place.id is not None else None
+    @classmethod
+    def from_domain(cls, domain: Place) -> "PlaceDTO":
+        oid = ObjectId(domain.id) if domain.id is not None else None
 
         return PlaceDTO(
             _id=oid,
-            created_at=place.created_at,
-            updated_at=place.updated_at,
-            name=place.name,
-            location=GeoPoint.from_location(place.location),
-            category=CategoryDTO.from_domain(place.category),
-            reviews=[ReviewDTO.from_domain(r) for r in place.reviews],
+            created_at=domain.created_at,
+            updated_at=domain.updated_at,
+            name=domain.name,
+            location=GeoPoint.from_location(domain.location),
+            category=CategoryDTO.from_domain(domain.category),
+            reviews=[ReviewDTO.from_domain(r) for r in domain.reviews],
         )
 
     def to_domain(self) -> Place:
@@ -101,7 +101,7 @@ class MongoPlaceRepository(PlaceRepository):
 
     def create_place(self, place: Place):
         dto = PlaceDTO.from_domain(place)
-        self.mongo_collection.insert_one(dto.model_dump())
+        self.mongo_collection.insert_one(dto.to_document())
 
     def save_last_review(self, place: Place):
         dto = PlaceDTO.from_domain(place)

@@ -1,29 +1,26 @@
 from datetime import datetime
-from typing import Optional
 
 from bson.objectid import ObjectId
-from pydantic import BaseModel, Field
 from pymongo.collection import Collection
 from pymongo.database import Database
 
-from src.module.common.infrastructure.mongodb import ValidatedObjectId
+from src.module.common.infrastructure.mongodb.document import InternalDocument
 from src.module.manager.domain.category import Category, CategoryRepository
 
 
-class CategoryDTO(BaseModel):
-    id: Optional[ValidatedObjectId] = Field(alias="_id")
+class CategoryDTO(InternalDocument[Category]):
     created_at: datetime
     updated_at: datetime
     name: str
 
-    @staticmethod
-    def from_domain(category: Category) -> "CategoryDTO":
-        oid = ObjectId(category.id) if category.id is not None else None
+    @classmethod
+    def from_domain(cls, domain: Category) -> "CategoryDTO":
+        oid = ObjectId(domain.id) if domain.id is not None else None
         return CategoryDTO(
             _id=oid,
-            created_at=category.created_at,
-            updated_at=category.updated_at,
-            name=category.name,
+            created_at=domain.created_at,
+            updated_at=domain.updated_at,
+            name=domain.name,
         )
 
     def to_domain(self) -> Category:
@@ -39,8 +36,9 @@ class MongoCategoryRepository(CategoryRepository):
 
     def create_category(self, category: Category):
         dto = CategoryDTO.from_domain(category)
-        print(dto.model_dump())
-        self.mongo_collection.insert_one(dto.model_dump())
+        document = dto.model_dump(by_alias=True)
+        print(document)
+        self.mongo_collection.insert_one(document)
 
     def find_category_by_id(self, category_id) -> Category:
         doc = self.mongo_collection.find_one({"_id": ObjectId(category_id)})
