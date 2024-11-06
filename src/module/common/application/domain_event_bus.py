@@ -1,9 +1,12 @@
 import asyncio
 from asyncio import TaskGroup
 from functools import singledispatchmethod
-from typing import Dict, List, Type
+from logging import getLogger
+from typing import List, Type
 
 from src.module.common.domain.events import DomainEvent, DomainEventSubscriber
+
+logger = getLogger(__name__)
 
 
 class DomainEventBus:
@@ -18,8 +21,10 @@ class DomainEventBus:
         subscribers = []
 
         for subscriber in self.subscribers:
-            if isinstance(subscriber.event_type(), event_type):
+            if issubclass(event_type, subscriber.event_type()):
                 subscribers.append(subscriber)
+
+        logger.debug("Founded %d subscribers for event %s", len(subscribers), event_type)
 
         return subscribers
 
@@ -28,6 +33,8 @@ class DomainEventBus:
         return self.find_subscribers(type(event))
 
     async def async_trigger(self, event: DomainEvent):
+        logger.debug("Event triggered: %s", event)
+
         subscribers: List[DomainEventSubscriber] = self.find_subscribers(event)
 
         async with TaskGroup() as task_group:
@@ -37,3 +44,12 @@ class DomainEventBus:
     def trigger(self, event: DomainEvent):
         loop = asyncio.get_event_loop()
         loop.create_task(self.async_trigger(event))
+
+    async def async_trigger_list(self, events: List[DomainEvent]):
+        async with TaskGroup() as task_group:
+            for event in events:
+                task_group.create_task(self.async_trigger(event))
+
+    def trigger_list(self, events: List[DomainEvent]):
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.async_trigger_list(events))
