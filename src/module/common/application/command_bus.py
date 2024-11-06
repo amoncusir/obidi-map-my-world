@@ -18,7 +18,7 @@ class CommandBus:
 
     @singledispatchmethod
     def find_handler(self, command: Type[Command]) -> CommandHandler:
-        handler = self.handlers.get(command)
+        handler = self.handlers.get(command, None)
 
         if handler is None:
             raise CommandBusNoHandlerFoundError(f"Not found any handler for command {repr(command)}")
