@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Type
 
+from src.module.common.application.domain_event_bus import DomainEventBus
 from src.module.common.domain.command import Command, CommandHandler, CommandResult
 from src.module.common.domain.errors import DomainError
 from src.module.common.domain.values import Location
@@ -33,6 +34,7 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResult]):
 
     place_repository: PlaceRepository
     category_repository: CategoryRepository
+    domain_event_bus: DomainEventBus
 
     @classmethod
     def command_type(cls) -> Type[CreatePlace]:
@@ -51,5 +53,8 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResult]):
         )
 
         place_id = await self.place_repository.create_place(place)
+
+        events = place.pop_events()
+        self.domain_event_bus.trigger_list(events)
 
         return CreatePlaceResult(place_id=place_id)
