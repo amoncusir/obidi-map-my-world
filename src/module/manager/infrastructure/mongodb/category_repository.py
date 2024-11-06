@@ -36,7 +36,7 @@ class MongoCategoryRepository(CategoryRepository):
 
     def create_category(self, category: Category):
         dto = CategoryDTO.from_domain(category)
-        document = dto.model_dump(by_alias=True)
+        document = dto.to_document()
         print(document)
         self.mongo_collection.insert_one(document)
 

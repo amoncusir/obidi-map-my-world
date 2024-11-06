@@ -8,7 +8,7 @@ from src.module.common.infrastructure.mongodb import ValidatedObjectId
 
 
 class InternalDocument[Domain](BaseModel):
-    id: Optional[ValidatedObjectId] = Field(alias="_id")
+    id: Optional[ValidatedObjectId] = Field(default=None, alias="_id")
 
     @classmethod
     @abstractmethod
@@ -18,4 +18,4 @@ class InternalDocument[Domain](BaseModel):
     def to_domain(self) -> Domain: ...
 
     def to_document(self) -> Dict[str, Any]:
-        return self.model_dump(by_alias=True, exclude_none=True)
+        return self.model_dump(by_alias=True, exclude_defaults=True)
