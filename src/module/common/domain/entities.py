@@ -1,12 +1,7 @@
-from datetime import UTC, datetime
-
 from pydantic import BaseModel, Field
 
 from src.module.common.domain.types import DateTime
-
-
-def now() -> datetime:
-    return datetime.now(tz=UTC)
+from src.module.common.utils import now
 
 
 class DomainEntity[ID](BaseModel):
