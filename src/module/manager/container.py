@@ -2,12 +2,16 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from pymongo.asynchronous.database import AsyncDatabase
 
+from src.module.common.application.domain_event_bus import DomainEventBus
 from src.module.manager.application.command import CreatePlaceCommandHandler
 from src.module.manager.application.command.add_review_on_place import (
     AddReviewOnPlaceCommandHandler,
 )
 from src.module.manager.application.command.create_category import (
     CreateCategoryCommandHandler,
+)
+from src.module.manager.application.subscriber.domain_event import (
+    LoggerDomainEventSubscriber,
 )
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.place import PlaceRepository
@@ -17,6 +21,7 @@ from src.module.manager.infrastructure.mongodb.category_repository import (
 from src.module.manager.infrastructure.mongodb.place_repository import (
     MongoPlaceRepository,
 )
+from src.module.providers import CommandHandlerProvider, DomainEventSubscriberProvider
 
 
 class Repository(DeclarativeContainer):
@@ -31,20 +36,29 @@ class Repository(DeclarativeContainer):
     category_repository = providers.Dependency(instance_of=CategoryRepository, default=mongo_category_repository)
 
 
+class DomainEventSubscriber(DeclarativeContainer):
+
+    logger_events = DomainEventSubscriberProvider(LoggerDomainEventSubscriber)
+
+    list = providers.List(logger_events)
+
+
 class Command(DeclarativeContainer):
     repository = providers.DependenciesContainer()
+    domain_event_bus = providers.Dependency(DomainEventBus)
 
-    create_category = providers.Singleton(
+    create_category = CommandHandlerProvider(
         CreateCategoryCommandHandler, category_repository=repository.category_repository
     )
 
-    create_place = providers.Singleton(
+    create_place = CommandHandlerProvider(
         CreatePlaceCommandHandler,
         category_repository=repository.category_repository,
         place_repository=repository.place_repository,
+        domain_event_bus=domain_event_bus,
     )
 
-    add_review_on_place = providers.Singleton(
+    add_review_on_place = CommandHandlerProvider(
         AddReviewOnPlaceCommandHandler, place_repository=repository.place_repository
     )
 
@@ -52,15 +66,19 @@ class Command(DeclarativeContainer):
 class ManagerContainer(DeclarativeContainer):
     config = providers.Configuration()
     database = providers.Dependency(AsyncDatabase)
+    domain_event_bus = providers.Dependency(DomainEventBus)
 
     repository = providers.Container(
         Repository,
         database=database,
     )
 
+    domain_event_subscriber = providers.Container(
+        DomainEventSubscriber,
+    )
+
     command = providers.Container(
         Command,
         repository=repository,
+        domain_event_bus=domain_event_bus,
     )
-
-    list_commands = providers.List(command.create_category, command.create_place, command.add_review_on_place)
