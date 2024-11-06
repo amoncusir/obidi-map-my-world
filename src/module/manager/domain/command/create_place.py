@@ -38,7 +38,7 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResult]):
     def command_type(cls) -> Type[CreatePlace]:
         return CreatePlace
 
-    async def process_command(self, command: CreatePlace) -> CreatePlaceResult:
+    async def handle_command(self, command: CreatePlace) -> CreatePlaceResult:
         category = await self.category_repository.find_category_by_id(command.category_id)
 
         if category is None:

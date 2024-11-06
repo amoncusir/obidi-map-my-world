@@ -27,7 +27,7 @@ class CreateCategoryCommandHandler(CommandHandler[CreateCategory, CreateCategory
     def command_type(cls) -> Type[CreateCategory]:
         return CreateCategory
 
-    async def process_command(self, command: CreateCategory) -> CreateCategoryResult:
+    async def handle_command(self, command: CreateCategory) -> CreateCategoryResult:
 
         category = Category(name=command.category_name)
         category_id = await self.category_repository.create_category(category)

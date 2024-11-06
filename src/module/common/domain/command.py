@@ -33,14 +33,14 @@ class CommandHandler[CommandType, ReturnType]:
         start = datetime.now()
         self.log.debug("Handled Command: %s", command)
 
-        result = await self.process_command(command)
+        result = await self.handle_command(command)
 
         self.log.debug("Finished Command on time (%s): %s", datetime.now() - start, command)
 
         return result
 
     @abstractmethod
-    async def process_command(self, command: CommandType) -> ReturnType: ...
+    async def handle_command(self, command: CommandType) -> ReturnType: ...
 
     @classmethod
     @abstractmethod

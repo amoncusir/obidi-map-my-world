@@ -32,7 +32,7 @@ class AddReviewOnPlaceCommandHandler(CommandHandler[AddReviewOnPlace, AddReviewO
     def command_type(cls) -> Type[AddReviewOnPlace]:
         return AddReviewOnPlace
 
-    async def process_command(self, command: AddReviewOnPlace) -> AddReviewOnPlaceResult:
+    async def handle_command(self, command: AddReviewOnPlace) -> AddReviewOnPlaceResult:
         place = await self.place_repository.find_place_by_id(command.place_id)
 
         if not place:
