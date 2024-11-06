@@ -1,15 +1,21 @@
+from dataclasses import dataclass
 from typing import Type
 
 from src.module.common.domain.command import Command, CommandHandler
+from src.module.common.domain.errors import DomainError
 from src.module.common.domain.values import Location
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.category.category import CategoryID
 from src.module.manager.domain.place import Place, PlaceRepository
 
 
+class CreatePlaceInvalidCategoryIdError(DomainError):
+    pass
+
+
 class CreatePlace(Command):
     category_id: CategoryID
-    name: str
+    place_name: str
     location: Location
 
     @classmethod
@@ -17,6 +23,7 @@ class CreatePlace(Command):
         return "manager_create_place"
 
 
+@dataclass
 class CreatePlaceCommandHandler(CommandHandler[CreatePlace]):
 
     place_repository: PlaceRepository
@@ -30,8 +37,8 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace]):
         category = self.category_repository.find_category_by_id(command.category_id)
 
         if category is None:
-            ...
+            raise CreatePlaceInvalidCategoryIdError("Invalid category_id")
 
-        place = Place(category=category, name=command.name, location=command.location)
+        place = Place(category=category, name=command.place_name, location=command.location)
 
         self.place_repository.create_place(place)
