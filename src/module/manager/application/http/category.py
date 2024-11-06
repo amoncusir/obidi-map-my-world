@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict, Field
 
 from src.app import application
-from src.module.manager.domain.command.create_category import (
+from src.module.manager.application.command.create_category import (
     CreateCategory,
     CreateCategoryResult,
 )

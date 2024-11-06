@@ -1,17 +1,15 @@
-from types import NoneType
-
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from pymongo.asynchronous.database import AsyncDatabase
 
-from src.module.manager.domain.category import CategoryRepository
-from src.module.manager.domain.command.add_review_on_place import (
+from src.module.manager.application.command import CreatePlaceCommandHandler
+from src.module.manager.application.command.add_review_on_place import (
     AddReviewOnPlaceCommandHandler,
 )
-from src.module.manager.domain.command.create_category import (
+from src.module.manager.application.command.create_category import (
     CreateCategoryCommandHandler,
 )
-from src.module.manager.domain.command.create_place import CreatePlaceCommandHandler
+from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.place import PlaceRepository
 from src.module.manager.infrastructure.mongodb.category_repository import (
     MongoCategoryRepository,
