@@ -5,6 +5,9 @@ from dependency_injector.containers import DeclarativeContainer
 from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.manager.domain.category import CategoryRepository
+from src.module.manager.domain.command.add_review_on_place import (
+    AddReviewOnPlaceCommandHandler,
+)
 from src.module.manager.domain.command.create_category import (
     CreateCategoryCommandHandler,
 )
@@ -43,6 +46,10 @@ class Command(DeclarativeContainer):
         place_repository=repository.place_repository,
     )
 
+    add_review_on_place = providers.Singleton(
+        AddReviewOnPlaceCommandHandler, place_repository=repository.place_repository
+    )
+
 
 class ManagerContainer(DeclarativeContainer):
     config = providers.Configuration()
@@ -58,7 +65,4 @@ class ManagerContainer(DeclarativeContainer):
         repository=repository,
     )
 
-    list_commands = providers.List(
-        command.create_category,
-        command.create_place,
-    )
+    list_commands = providers.List(command.create_category, command.create_place, command.add_review_on_place)
