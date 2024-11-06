@@ -21,7 +21,7 @@ PlaceID = TypeVar("PlaceID", bound=str)
 
 
 class Place(AggregateRoot[PlaceID]):
-    id: Optional[PlaceID] = Field(kw_only=True)
+    id: Optional[PlaceID] = Field(default=None, kw_only=True)
     name: str
     location: Location
     category: Category

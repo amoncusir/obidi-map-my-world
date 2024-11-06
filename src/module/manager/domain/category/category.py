@@ -8,5 +8,5 @@ CategoryID = TypeVar("CategoryID", bound=str)
 
 
 class Category(DomainEntity):
-    id: Optional[CategoryID] = Field(kw_only=True)
+    id: Optional[CategoryID] = Field(default=None, kw_only=True)
     name: str
