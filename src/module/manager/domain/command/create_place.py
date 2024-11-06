@@ -7,7 +7,7 @@ from src.module.common.domain.values import Location
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.category.category import CategoryID
 from src.module.manager.domain.place import Place, PlaceRepository
-from src.module.manager.domain.place.place import PlaceID
+from src.module.manager.domain.place.place import CategoryProjection, PlaceID
 
 
 class CreatePlaceInvalidCategoryIdError(DomainError):
@@ -44,7 +44,8 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResult]):
         if category is None:
             raise CreatePlaceInvalidCategoryIdError("Invalid category_id")
 
-        place = Place(category=category, name=command.place_name, location=command.location)
+        category_projection = CategoryProjection.from_entity(category)
+        place = Place(category=category_projection, name=command.place_name, location=command.location)
 
         place_id = await self.place_repository.create_place(place)
 
