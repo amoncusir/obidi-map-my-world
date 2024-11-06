@@ -13,13 +13,16 @@ class Command(BaseModel):
     @abstractmethod
     def name(cls) -> str: ...
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.name()})"
+
 
 CommandType = TypeVar("CommandType", bound=Command)
 
 
 class CommandHandler[CommandType]:
 
-    log: Logger
+    log: Logger = getLogger()
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls)
