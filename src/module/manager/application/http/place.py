@@ -3,8 +3,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from src.app import application
 from src.module.common.domain.values import Location
-from src.module.manager.application.command import CreatePlace, CreatePlaceResult
-from src.module.manager.application.command.add_review_on_place import AddReviewOnPlace
+from src.module.manager.application.command import AddReviewOnPlace, CreatePlace
+from src.module.manager.application.command.create_place import CreatePlaceResult
 
 router = APIRouter(prefix="/places", tags=["place"])
 
