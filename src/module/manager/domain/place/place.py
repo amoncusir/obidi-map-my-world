@@ -33,6 +33,7 @@ class Place(AggregateRoot[PlaceID]):
 
     def add_review(self, review: Review):
         self.reviews.append(review)
+        self._update()
 
     def get_reviews(self) -> List[Review]:
         return self.reviews.copy()
