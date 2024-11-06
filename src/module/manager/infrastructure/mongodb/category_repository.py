@@ -28,7 +28,7 @@ class CategoryDTO(InternalDocument[Category]):
         )
 
     def to_domain(self) -> Category:
-        return Category(id=self.id, created_at=self.created_at, updated_at=self.updated_at, name=self.name)
+        return Category(id=str(self.id), created_at=self.created_at, updated_at=self.updated_at, name=self.name)
 
 
 class MongoCategoryRepository(CategoryRepository):
