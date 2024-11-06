@@ -2,7 +2,7 @@ from types import NoneType
 
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
-from pymongo.database import Database
+from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.command.create_category import (
@@ -19,7 +19,7 @@ from src.module.manager.infrastructure.mongodb.place_repository import (
 
 
 class Repository(DeclarativeContainer):
-    database = providers.Dependency(Database)
+    database = providers.Dependency(AsyncDatabase)
 
     mongo_place_repository = providers.Singleton(MongoPlaceRepository, database=database)
 
@@ -46,7 +46,7 @@ class Command(DeclarativeContainer):
 
 class ManagerContainer(DeclarativeContainer):
     config = providers.Configuration()
-    database = providers.Dependency(Database)
+    database = providers.Dependency(AsyncDatabase)
 
     repository = providers.Container(
         Repository,

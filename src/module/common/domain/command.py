@@ -40,7 +40,7 @@ class CommandHandler[CommandType, ReturnType]:
         start = datetime.now()
         self.log.debug("Handled Command: %s", command)
 
-        result = self.process_command(command)
+        result = await self.process_command(command)
 
         self.log.debug("Finished Command on time (%s): %s", datetime.now() - start, command)
 

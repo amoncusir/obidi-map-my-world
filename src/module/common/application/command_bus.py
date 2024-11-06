@@ -34,4 +34,4 @@ class CommandBus:
             raise ValueError("Invalid command type. Must be a Command base instance")
 
         handler = self.find_handler(command)
-        return handler(command)
+        return await handler(command)

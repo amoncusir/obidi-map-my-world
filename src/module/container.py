@@ -3,7 +3,7 @@ from typing import Any, List
 
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
-from pymongo.database import Database
+from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.common.application.command_bus import CommandBus
 from src.module.geoquerier.container import GeoQuerierContainer
@@ -18,7 +18,7 @@ def plain_list(*lists: List[Any]) -> List[Any]:
 class ModuleContainer(DeclarativeContainer):
     config = providers.Configuration()
 
-    database = providers.Dependency(Database)
+    database = providers.Dependency(AsyncDatabase)
 
     manager_container = providers.Container(
         ManagerContainer,
