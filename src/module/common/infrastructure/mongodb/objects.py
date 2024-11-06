@@ -1,11 +1,10 @@
-from abc import abstractmethod
 from typing import Any, List
 
 from bson.objectid import ObjectId
 from pydantic import BaseModel, GetCoreSchemaHandler, GetJsonSchemaHandler
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
-from typing_extensions import Annotated, Optional, Self
+from typing_extensions import Annotated
 
 
 class GeoJson(BaseModel):

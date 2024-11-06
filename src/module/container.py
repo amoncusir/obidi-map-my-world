@@ -1,5 +1,4 @@
-from itertools import chain
-from typing import Any, List
+from typing import Any
 
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
