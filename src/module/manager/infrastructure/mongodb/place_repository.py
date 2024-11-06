@@ -10,7 +10,7 @@ from src.module.common.domain.values import GenericUUID, Location
 from src.module.common.infrastructure.mongodb import GeoJson, ValidatedObjectId
 from src.module.common.infrastructure.mongodb.document import InternalDocument
 from src.module.manager.domain.place import Place, PlaceRepository
-from src.module.manager.domain.place.place import PlaceID, Review
+from src.module.manager.domain.place.place import CategoryProjection, PlaceID, Review
 from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
 
 
@@ -54,12 +54,29 @@ class ReviewDTO(BaseModel):
         )
 
 
+class CategoryProjectionDTO(BaseModel):
+    id: str
+    created_at: datetime
+    name: str
+
+    @classmethod
+    def from_domain(cls, domain: CategoryProjection) -> "CategoryProjectionDTO":
+        return CategoryProjectionDTO(
+            id=domain.id,
+            created_at=domain.created_at,
+            name=domain.name,
+        )
+
+    def to_domain(self) -> CategoryProjection:
+        return CategoryProjection(id=self.id, created_at=self.created_at, name=self.name)
+
+
 class PlaceDTO(InternalDocument[Place]):
     created_at: datetime
     updated_at: datetime
     name: str
     location: GeoPoint
-    category: CategoryDTO
+    category: CategoryProjectionDTO
     reviews: List[ReviewDTO]
 
     @classmethod
@@ -72,7 +89,7 @@ class PlaceDTO(InternalDocument[Place]):
             updated_at=domain.updated_at,
             name=domain.name,
             location=GeoPoint.from_location(domain.location),
-            category=CategoryDTO.from_domain(domain.category),
+            category=CategoryProjectionDTO.from_domain(domain.category),
             reviews=[ReviewDTO.from_domain(r) for r in domain.reviews],
         )
 
