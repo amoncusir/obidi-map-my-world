@@ -8,25 +8,18 @@ from src.module.common.domain.events import DomainEvent, DomainEventSubscriber
 
 class DomainEventBus:
 
-    subscribers: Dict[Type[DomainEvent], List[DomainEventSubscriber]]
+    subscribers: List[DomainEventSubscriber]
 
     def __init__(self, subscribers: List[DomainEventSubscriber]):
-        self.subscribers = {}
-
-        for subscriber in subscribers:
-            event_type = subscriber.event_type()
-
-            if event_type not in self.subscribers:
-                self.subscribers[event_type] = []
-
-            self.subscribers[event_type].append(subscriber)
+        self.subscribers = subscribers
 
     @singledispatchmethod
     def find_subscribers(self, event_type: Type[DomainEvent]) -> List[DomainEventSubscriber]:
-        subscribers = self.subscribers.get(event_type, None)
+        subscribers = []
 
-        if subscribers is None:
-            return []
+        for subscriber in self.subscribers:
+            if isinstance(subscriber.event_type(), event_type):
+                subscribers.append(subscriber)
 
         return subscribers
 
