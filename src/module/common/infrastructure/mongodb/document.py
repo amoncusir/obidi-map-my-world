@@ -7,7 +7,16 @@ from typing_extensions import Dict, Optional, Self
 from src.module.common.infrastructure.mongodb import ValidatedObjectId
 
 
-class PrincipalDocument[Domain](BaseModel):
+class Document(BaseModel):
+    def to_document(self) -> Dict[str, Any]:
+        return self.model_dump(by_alias=True, exclude_defaults=True)
+
+    @classmethod
+    def from_document(cls, document: Dict[str, Any]) -> "Document":
+        return cls.model_load(document)
+
+
+class PrincipalDocument[Domain](Document):
     id: Optional[ValidatedObjectId] = Field(default=None, alias="_id")
 
     @classmethod
@@ -16,6 +25,3 @@ class PrincipalDocument[Domain](BaseModel):
 
     @abstractmethod
     def to_domain(self) -> Domain: ...
-
-    def to_document(self) -> Dict[str, Any]:
-        return self.model_dump(by_alias=True, exclude_defaults=True)

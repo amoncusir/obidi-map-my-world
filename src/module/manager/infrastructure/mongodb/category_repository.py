@@ -52,5 +52,5 @@ class MongoCategoryRepository(CategoryRepository):
 
         logger.debug("Find Category by id[%s]: %s", category_id, doc)
 
-        dto = CategoryDTO.model_validate(doc)
+        dto = CategoryDTO.from_document(doc)
         return dto.to_domain()
