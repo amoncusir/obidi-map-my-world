@@ -6,6 +6,10 @@ PROJECT_VERSION ?= v$(shell poetry version -s)
 PROJECT_NAME ?= mapmyworld
 PYTHON_VERSION ?= $(shell cat .python-version)
 
+.PHONY: build
+build:
+	docker build -t "${PROJECT_NAME}:latest" -t "${PROJECT_NAME}:${PROJECT_VERSION}" -f "${PWD}infrastructure/Dockerfile" ${PWD}
+
 clean:
 	find "${PWD}src/" -name "__pycache__" -type d -exec rm -rfv {} +
 
@@ -25,6 +29,11 @@ pre-commit:
 .PHONY: info
 info:
 	@echo "${PROJECT_NAME};${PROJECT_VERSION};${PYTHON_VERSION}"
+
+.PHONY: run-services
+run-services:
+	docker compose up -d
+
 
 .PHONY: run-api
 run-api:
