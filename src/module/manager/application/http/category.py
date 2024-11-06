@@ -2,7 +2,10 @@ from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict, Field
 
 from src.app import application
-from src.module.manager.domain.command.create_category import CreateCategory
+from src.module.manager.domain.command.create_category import (
+    CreateCategory,
+    CreateCategoryResult,
+)
 
 router = APIRouter(prefix="/categories", tags=["category"])
 
@@ -34,7 +37,7 @@ class CreateCategoryRequest(BaseModel):
 
 class CreateCategoryResponse(BaseModel):
     model_config = ConfigDict(frozen=True)
-    id: str
+    id: str = Field(description="Category ID")
 
 
 @router.post("")
@@ -43,6 +46,6 @@ async def create_category(category: CreateCategoryRequest) -> CreateCategoryResp
     bus = app.command_bus
 
     command = CreateCategory(category_name=category.name)
-    response = await bus.exec(command)
+    result: CreateCategoryResult = await bus.exec(command)
 
-    return CreateCategoryResponse(id=response.category_id)
+    return CreateCategoryResponse(id=result.category_id)

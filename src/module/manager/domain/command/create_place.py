@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Type
 
-from src.module.common.domain.command import Command, CommandHandler, CommandResponse
+from src.module.common.domain.command import Command, CommandHandler, CommandResult
 from src.module.common.domain.errors import DomainError
 from src.module.common.domain.values import Location
 from src.module.manager.domain.category import CategoryRepository
@@ -24,12 +24,12 @@ class CreatePlace(Command):
         return "manager_create_place"
 
 
-class CreatePlaceResponse(CommandResponse):
+class CreatePlaceResult(CommandResult):
     place_id: PlaceID
 
 
 @dataclass
-class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResponse]):
+class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResult]):
 
     place_repository: PlaceRepository
     category_repository: CategoryRepository
@@ -38,7 +38,7 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResponse]
     def command_type(cls) -> Type[CreatePlace]:
         return CreatePlace
 
-    async def process_command(self, command: CreatePlace) -> CreatePlaceResponse:
+    async def process_command(self, command: CreatePlace) -> CreatePlaceResult:
         category = await self.category_repository.find_category_by_id(command.category_id)
 
         if category is None:
@@ -48,4 +48,4 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResponse]
 
         place_id = await self.place_repository.create_place(place)
 
-        return CreatePlaceResponse(place_id=place_id)
+        return CreatePlaceResult(place_id=place_id)
