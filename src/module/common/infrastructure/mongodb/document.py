@@ -7,7 +7,7 @@ from typing_extensions import Dict, Optional, Self
 from src.module.common.infrastructure.mongodb import ValidatedObjectId
 
 
-class InternalDocument[Domain](BaseModel):
+class PrincipalDocument[Domain](BaseModel):
     id: Optional[ValidatedObjectId] = Field(default=None, alias="_id")
 
     @classmethod

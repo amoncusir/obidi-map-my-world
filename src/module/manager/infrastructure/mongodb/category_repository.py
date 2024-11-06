@@ -5,14 +5,14 @@ from bson.objectid import ObjectId
 from pymongo.asynchronous.collection import AsyncCollection
 from pymongo.asynchronous.database import AsyncDatabase
 
-from src.module.common.infrastructure.mongodb.document import InternalDocument
+from src.module.common.infrastructure.mongodb.document import PrincipalDocument
 from src.module.manager.domain.category import Category, CategoryRepository
 from src.module.manager.domain.category.category import CategoryID
 
 logger = getLogger(__name__)
 
 
-class CategoryDTO(InternalDocument[Category]):
+class CategoryDTO(PrincipalDocument[Category]):
     created_at: datetime
     updated_at: datetime
     name: str

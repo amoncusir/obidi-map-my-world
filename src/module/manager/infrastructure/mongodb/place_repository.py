@@ -1,14 +1,15 @@
 from datetime import datetime
-from typing import List, Optional
+from logging import getLogger
+from typing import List
 
 from bson.objectid import ObjectId
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from pymongo.asynchronous.collection import AsyncCollection
 from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.common.domain.values import GenericUUID, Location
-from src.module.common.infrastructure.mongodb import GeoJson, ValidatedObjectId
-from src.module.common.infrastructure.mongodb.document import InternalDocument
+from src.module.common.infrastructure.mongodb import GeoJson
+from src.module.common.infrastructure.mongodb.document import PrincipalDocument
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import CategoryProjection, PlaceID, Review
 from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
@@ -71,7 +72,7 @@ class CategoryProjectionDTO(BaseModel):
         return CategoryProjection(id=self.id, created_at=self.created_at, name=self.name)
 
 
-class PlaceDTO(InternalDocument[Place]):
+class PlaceDTO(PrincipalDocument[Place]):
     created_at: datetime
     updated_at: datetime
     name: str
