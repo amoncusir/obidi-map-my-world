@@ -3,4 +3,5 @@
 debug: true
 
 mongodb:
-  url: "mongodb://dev:dev@localhost:27017/myworld"
+  url: "mongodb://dev:dev@localhost:27017/"
+  database: 'myworld'

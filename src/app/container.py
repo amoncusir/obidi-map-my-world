@@ -13,7 +13,7 @@ class MongoContainer(DeclarativeContainer):
 
     client = providers.Factory(mongodb.build_client, settings=settings)
 
-    database = providers.Factory(mongodb.get_database, client=client)
+    database = providers.Factory(mongodb.get_database, client=client, settings=settings)
 
 
 class MainContainer(DeclarativeContainer):

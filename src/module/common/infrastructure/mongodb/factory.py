@@ -10,8 +10,8 @@ def build_client(settings: MongoDBSettings) -> MongoClient:
     return MongoClient(settings.url)
 
 
-def get_database(client: MongoClient, db_name: Optional[str] = None) -> Database:
-    if db_name is None:
+def get_database(client: MongoClient, settings: MongoDBSettings) -> Database:
+    if settings.database is None:
         return client.get_default_database()
 
-    return client[db_name]
+    return client[settings.database]
