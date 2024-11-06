@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import Any, Dict, List, Type
+from typing import Dict, List, Type
 
 from src.module.common.domain.command import Command, CommandHandler, CommandResult
 from src.module.common.domain.errors import DomainError
