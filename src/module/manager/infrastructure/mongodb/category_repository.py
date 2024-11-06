@@ -6,11 +6,12 @@ from pydantic import BaseModel, Field
 from pymongo.collection import Collection
 from pymongo.database import Database
 
+from src.module.common.infrastructure.mongodb import ValidatedObjectId
 from src.module.manager.domain.category import Category, CategoryRepository
 
 
 class CategoryDTO(BaseModel):
-    id: Optional[ObjectId] = Field(alias="_id")
+    id: Optional[ValidatedObjectId] = Field(alias="_id")
     created_at: datetime
     updated_at: datetime
     name: str
@@ -33,7 +34,8 @@ class MongoCategoryRepository(CategoryRepository):
 
     mongo_collection: Collection
 
-    def __init__(self, database: Database): ...
+    def __init__(self, database: Database):
+        self.mongo_collection = database["categories"]
 
     def create_category(self, category: Category):
         dto = CategoryDTO.from_domain(category)

@@ -7,7 +7,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 
 from src.module.common.domain.values import GenericUUID, Location
-from src.module.common.infrastructure.mongodb import GeoJson
+from src.module.common.infrastructure.mongodb import GeoJson, ValidatedObjectId
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import Review
 from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
@@ -54,7 +54,7 @@ class ReviewDTO(BaseModel):
 
 
 class PlaceDTO(BaseModel):
-    id: Optional[ObjectId] = Field(alias="_id")
+    id: Optional[ValidatedObjectId] = Field(alias="_id")
     created_at: datetime
     updated_at: datetime
     name: str
@@ -96,7 +96,8 @@ class MongoPlaceRepository(PlaceRepository):
 
     mongo_collection: Collection
 
-    def __init__(self, database: Database): ...
+    def __init__(self, database: Database):
+        self.mongo_collection = database["places"]
 
     def create_place(self, place: Place):
         dto = PlaceDTO.from_domain(place)
