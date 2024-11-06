@@ -13,7 +13,7 @@ class CommandBus:
 
     handlers: Dict[Type[Command], CommandHandler]
 
-    def __init__(self, handlers: List[CommandHandler[Any]]):
+    def __init__(self, handlers: List[CommandHandler]):
         self.handlers = {h.command_type(): h for h in handlers}
 
     @singledispatchmethod
