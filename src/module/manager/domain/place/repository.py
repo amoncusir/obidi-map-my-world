@@ -1,7 +1,12 @@
 from abc import abstractmethod
 
+from src.module.common.domain.errors import DomainError
 from src.module.manager.domain.place import Place
 from src.module.manager.domain.place.place import PlaceID
+
+
+class InvalidUpdateOperation(DomainError):
+    pass
 
 
 class PlaceRepository:

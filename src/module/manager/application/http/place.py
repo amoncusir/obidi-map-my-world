@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response, status
 from pydantic import BaseModel, ConfigDict, Field
 
 from src.app import application
@@ -46,10 +46,10 @@ async def create_place(place: CreatePlaceRequest) -> CreatePlaceResponse:
 
 class CreateReview(BaseModel):
     model_config = ConfigDict(frozen=True)
-    rate: int = Field(description="Rate of review", allow_inf_nan=False)
+    rate: int = Field(description="Rate of review")
 
 
-@router.post("/{place_id}/review", status_code=201)
+@router.post("/{place_id}/review")
 async def review_place(place_id: str, review: CreateReview):
     app = application()
     bus = app.command_bus
@@ -60,3 +60,5 @@ async def review_place(place_id: str, review: CreateReview):
     )
 
     await bus.exec(command)
+
+    return Response(status_code=status.HTTP_201_CREATED)

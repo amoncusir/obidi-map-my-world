@@ -13,7 +13,7 @@ class Document(BaseModel):
 
     @classmethod
     def from_document(cls, document: Dict[str, Any]) -> "Document":
-        return cls.model_load(document)
+        return cls.model_validate(document)
 
 
 class PrincipalDocument[Domain](Document):

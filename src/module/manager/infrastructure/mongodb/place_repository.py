@@ -3,7 +3,6 @@ from logging import getLogger
 from typing import List
 
 from bson.objectid import ObjectId
-from pydantic import BaseModel
 from pymongo.asynchronous.collection import AsyncCollection
 from pymongo.asynchronous.database import AsyncDatabase
 
@@ -15,6 +14,7 @@ from src.module.common.infrastructure.mongodb.document import (
 )
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import CategoryProjection, PlaceID, Review
+from src.module.manager.domain.place.repository import InvalidUpdateOperation
 
 logger = getLogger(__name__)
 
@@ -44,7 +44,7 @@ class ReviewDTO(Document):
     @staticmethod
     def from_domain(review: Review) -> "ReviewDTO":
         return ReviewDTO(
-            id=review.id,
+            id=str(review.id),
             created_at=review.created_at,
             updated_at=review.updated_at,
             rate=review.rate,
@@ -108,7 +108,7 @@ class PlaceDTO(PrincipalDocument[Place]):
             reviews = [r.to_domain() for r in self.reviews]
 
         return Place(
-            id=self.id,
+            id=str(self.id),
             created_at=self.created_at,
             updated_at=self.updated_at,
             name=self.name,
@@ -119,7 +119,6 @@ class PlaceDTO(PrincipalDocument[Place]):
 
 
 class MongoPlaceRepository(PlaceRepository):
-
     mongo_collection: AsyncCollection
 
     def __init__(self, database: AsyncDatabase):
@@ -134,15 +133,21 @@ class MongoPlaceRepository(PlaceRepository):
         oid = PlaceDTO.get_id(place)
 
         if oid is None:
-            raise ...
+            raise InvalidUpdateOperation(
+                "The current place do not have an ID. To update a place must be persisted " "before"
+            )
 
         review = place.last_review
+        last_update = place.updated_at
         dto = ReviewDTO.from_domain(review)
         doc = dto.to_document()
 
         await self.mongo_collection.update_one(
             filter={"_id": oid},
-            update={"$push": {"reviews": doc}},
+            update={
+                "$set": {"updated_at": last_update},
+                "$push": {"reviews": doc},
+            },
         )
 
     async def find_place_by_id(self, place_id: PlaceID) -> Place:
