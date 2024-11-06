@@ -2,6 +2,7 @@ import os
 
 from src.app.container import MainContainer
 from src.app.utils import Singleton
+from src.module.common.application.command_bus import CommandBus
 
 
 class Application(metaclass=Singleton):
@@ -21,3 +22,7 @@ class Application(metaclass=Singleton):
     @property
     def debug(self) -> bool:
         return self.container.config.debug.as_(bool)
+
+    @property
+    def command_bus(self) -> CommandBus:
+        return self.container.module_container.command_bus()
