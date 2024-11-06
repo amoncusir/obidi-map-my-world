@@ -14,7 +14,7 @@ class DomainEvent(BaseModel):
     created_at: datetime = Field(default_factory=now)
 
 
-class DomainEventHandler[Event: DomainEvent]:
+class DomainEventSubscriber[Event: DomainEvent]:
     log: Logger = getLogger(__name__)
 
     async def __call__(self, event: Event):
