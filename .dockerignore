@@ -1,0 +1,14 @@
+.git/
+.idea/
+.venv/
+docs/
+dist/
+infrastructure/
+
+README.md
+CHALLENGE.md
+Makefile
+.dockerignore
+docker-compose.yml
+.gitignore
+.pre-commit-config.yaml
