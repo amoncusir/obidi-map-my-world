@@ -9,10 +9,14 @@ from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.common.domain.values import GenericUUID, Location
 from src.module.common.infrastructure.mongodb import GeoJson
-from src.module.common.infrastructure.mongodb.document import PrincipalDocument
+from src.module.common.infrastructure.mongodb.document import (
+    Document,
+    PrincipalDocument,
+)
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import CategoryProjection, PlaceID, Review
-from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
+
+logger = getLogger(__name__)
 
 
 class GeoPoint(GeoJson):
@@ -31,7 +35,7 @@ class GeoPoint(GeoJson):
         )
 
 
-class ReviewDTO(BaseModel):
+class ReviewDTO(Document):
     id: str
     created_at: datetime
     updated_at: datetime
@@ -55,7 +59,7 @@ class ReviewDTO(BaseModel):
         )
 
 
-class CategoryProjectionDTO(BaseModel):
+class CategoryProjectionDTO(Document):
     id: str
     created_at: datetime
     name: str
@@ -81,8 +85,12 @@ class PlaceDTO(PrincipalDocument[Place]):
     reviews: List[ReviewDTO]
 
     @classmethod
+    def get_id(cls, domain: Place) -> ObjectId:
+        return ObjectId(domain.id) if domain.id is not None else None
+
+    @classmethod
     def from_domain(cls, domain: Place) -> "PlaceDTO":
-        oid = ObjectId(domain.id) if domain.id is not None else None
+        oid = cls.get_id(domain)
 
         return PlaceDTO(
             _id=oid,
@@ -123,4 +131,24 @@ class MongoPlaceRepository(PlaceRepository):
         return str(result.inserted_id)
 
     async def save_last_review(self, place: Place):
-        dto = PlaceDTO.from_domain(place)
+        oid = PlaceDTO.get_id(place)
+
+        if oid is None:
+            raise ...
+
+        review = place.last_review
+        dto = ReviewDTO.from_domain(review)
+        doc = dto.to_document()
+
+        await self.mongo_collection.update_one(
+            filter={"_id": oid},
+            update={"$push": {"reviews": doc}},
+        )
+
+    async def find_place_by_id(self, place_id: PlaceID) -> Place:
+        doc = await self.mongo_collection.find_one({"_id": ObjectId(place_id)})
+
+        logger.debug("Find place by id[%s]: %s", place_id, doc)
+
+        dto = PlaceDTO.from_document(doc)
+        return dto.to_domain()
