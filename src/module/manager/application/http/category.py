@@ -37,12 +37,12 @@ class CreateCategoryResponse(BaseModel):
     id: str
 
 
-@router.post("/")
+@router.post("")
 async def create_category(category: CreateCategoryRequest) -> CreateCategoryResponse:
     app = application()
     bus = app.command_bus
 
     command = CreateCategory(category_name=category.name)
-    bus.exec(command)
+    response = await bus.exec(command)
 
-    return CreateCategoryResponse(id="lol")
+    return CreateCategoryResponse(id=response.category_id)

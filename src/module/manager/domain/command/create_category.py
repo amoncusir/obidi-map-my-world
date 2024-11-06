@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from typing import Type
 
-from src.module.common.domain.command import Command, CommandHandler
+from src.module.common.domain.command import Command, CommandHandler, CommandResponse
 from src.module.manager.domain.category import Category, CategoryRepository
+from src.module.manager.domain.category.category import CategoryID
 
 
 class CreateCategory(Command):
@@ -13,8 +14,12 @@ class CreateCategory(Command):
         return "manager_create_category"
 
 
+class CreateCategoryResponse(CommandResponse):
+    category_id: CategoryID
+
+
 @dataclass
-class CreateCategoryCommandHandler(CommandHandler[CreateCategory]):
+class CreateCategoryCommandHandler(CommandHandler[CreateCategory, CreateCategoryResponse]):
 
     category_repository: CategoryRepository
 
@@ -22,7 +27,9 @@ class CreateCategoryCommandHandler(CommandHandler[CreateCategory]):
     def command_type(cls) -> Type[CreateCategory]:
         return CreateCategory
 
-    def process_command(self, command: CreateCategory):
+    async def process_command(self, command: CreateCategory) -> CreateCategoryResponse:
 
         category = Category(name=command.category_name)
-        self.category_repository.create_category(category)
+        category_id = await self.category_repository.create_category(category)
+
+        return CreateCategoryResponse(category_id=category_id)

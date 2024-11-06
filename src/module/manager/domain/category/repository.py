@@ -1,12 +1,12 @@
 from abc import abstractmethod
 
-from src.module.manager.domain.category.category import Category
+from src.module.manager.domain.category.category import Category, CategoryID
 
 
 class CategoryRepository:
 
     @abstractmethod
-    def create_category(self, category: Category): ...
+    async def create_category(self, category: Category) -> CategoryID: ...
 
     @abstractmethod
-    def find_category_by_id(self, category_id) -> Category: ...
+    async def find_category_by_id(self, category_id: CategoryID) -> Category: ...

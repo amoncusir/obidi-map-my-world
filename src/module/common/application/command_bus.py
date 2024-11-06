@@ -1,7 +1,7 @@
 from functools import singledispatchmethod
 from typing import Any, Dict, List, Type
 
-from src.module.common.domain.command import Command, CommandHandler
+from src.module.common.domain.command import Command, CommandHandler, CommandResponse
 from src.module.common.domain.errors import DomainError
 
 
@@ -29,9 +29,9 @@ class CommandBus:
     def _(self, command: Command):
         return self.find_handler(type(command))
 
-    def exec(self, command: Command):
+    async def exec(self, command: Command) -> CommandResponse:
         if not isinstance(command, Command):
             raise ValueError("Invalid command type. Must be a Command base instance")
 
         handler = self.find_handler(command)
-        handler(command)
+        return handler(command)

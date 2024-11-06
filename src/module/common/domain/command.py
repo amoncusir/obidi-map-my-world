@@ -17,10 +17,15 @@ class Command(BaseModel):
         return f"{self.__class__.__name__}({self.name()})"
 
 
+class CommandResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+
 CommandType = TypeVar("CommandType", bound=Command)
+ReturnType = TypeVar("ReturnType", bound=CommandResponse)
 
 
-class CommandHandler[CommandType]:
+class CommandHandler[CommandType, ReturnType]:
 
     log: Logger = getLogger()
 
@@ -31,16 +36,18 @@ class CommandHandler[CommandType]:
 
         return instance
 
-    def __call__(self, command: CommandType):
+    async def __call__(self, command: CommandType) -> ReturnType:
         start = datetime.now()
         self.log.debug("Handled Command: %s", command)
 
-        self.process_command(command)
+        result = self.process_command(command)
 
         self.log.debug("Finished Command on time (%s): %s", datetime.now() - start, command)
 
+        return result
+
     @abstractmethod
-    def process_command(self, command: CommandType): ...
+    async def process_command(self, command: CommandType) -> ReturnType: ...
 
     @classmethod
     @abstractmethod

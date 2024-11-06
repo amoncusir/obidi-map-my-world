@@ -1,11 +1,15 @@
 from datetime import datetime
+from logging import getLogger
 
 from bson.objectid import ObjectId
-from pymongo.collection import Collection
-from pymongo.database import Database
+from pymongo.asynchronous.collection import AsyncCollection
+from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.common.infrastructure.mongodb.document import InternalDocument
 from src.module.manager.domain.category import Category, CategoryRepository
+from src.module.manager.domain.category.category import CategoryID
+
+logger = getLogger(__name__)
 
 
 class CategoryDTO(InternalDocument[Category]):
@@ -29,19 +33,24 @@ class CategoryDTO(InternalDocument[Category]):
 
 class MongoCategoryRepository(CategoryRepository):
 
-    mongo_collection: Collection
+    mongo_collection: AsyncCollection
 
-    def __init__(self, database: Database):
+    def __init__(self, database: AsyncDatabase):
         self.mongo_collection = database["categories"]
 
-    def create_category(self, category: Category):
+    async def create_category(self, category: Category) -> CategoryID:
         dto = CategoryDTO.from_domain(category)
         document = dto.to_document()
-        print(document)
-        self.mongo_collection.insert_one(document)
 
-    def find_category_by_id(self, category_id) -> Category:
-        doc = self.mongo_collection.find_one({"_id": ObjectId(category_id)})
-        print(doc)
+        logger.debug("New Category: %s", document)
+
+        result = await self.mongo_collection.insert_one(document)
+        return result.inserted_id
+
+    async def find_category_by_id(self, category_id: CategoryID) -> Category:
+        doc = await self.mongo_collection.find_one({"_id": ObjectId(category_id)})
+
+        logger.debug("Find Category by id[%s]: %s", category_id, doc)
+
         dto = CategoryDTO.model_validate(doc)
         return dto.to_domain()

@@ -16,7 +16,7 @@ class CreatePlaceResponse(BaseModel):
     id: str = Field(description="Generated ID")
 
 
-@router.post("/")
+@router.post("")
 async def create_place(place: CreatePlace) -> CreatePlaceResponse: ...
 
 

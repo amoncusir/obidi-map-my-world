@@ -3,14 +3,14 @@ from typing import List, Optional
 
 from bson.objectid import ObjectId
 from pydantic import BaseModel, Field
-from pymongo.collection import Collection
-from pymongo.database import Database
+from pymongo.asynchronous.collection import AsyncCollection
+from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.common.domain.values import GenericUUID, Location
 from src.module.common.infrastructure.mongodb import GeoJson, ValidatedObjectId
 from src.module.common.infrastructure.mongodb.document import InternalDocument
 from src.module.manager.domain.place import Place, PlaceRepository
-from src.module.manager.domain.place.place import Review
+from src.module.manager.domain.place.place import PlaceID, Review
 from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
 
 
@@ -94,14 +94,15 @@ class PlaceDTO(InternalDocument[Place]):
 
 class MongoPlaceRepository(PlaceRepository):
 
-    mongo_collection: Collection
+    mongo_collection: AsyncCollection
 
-    def __init__(self, database: Database):
+    def __init__(self, database: AsyncDatabase):
         self.mongo_collection = database["places"]
 
-    def create_place(self, place: Place):
+    async def create_place(self, place: Place) -> PlaceID:
         dto = PlaceDTO.from_domain(place)
-        self.mongo_collection.insert_one(dto.to_document())
+        result = await self.mongo_collection.insert_one(dto.to_document())
+        return result.inserted_id
 
-    def save_last_review(self, place: Place):
+    async def save_last_review(self, place: Place):
         dto = PlaceDTO.from_domain(place)
