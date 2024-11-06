@@ -11,3 +11,6 @@ class PlaceRepository:
 
     @abstractmethod
     async def save_last_review(self, place: Place): ...
+
+    @abstractmethod
+    async def find_place_by_id(self, place_id: PlaceID) -> Place: ...
