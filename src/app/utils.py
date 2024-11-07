@@ -1,4 +1,7 @@
 import threading
+from typing import Any
+
+from dependency_injector.containers import DeclarativeContainer
 
 
 class Singleton(type):
@@ -27,3 +30,7 @@ class Singleton(type):
 
         if target_cls in cls._instances:
             del cls._instances[target_cls]
+
+
+def list_providers(container: DeclarativeContainer, provider_type: Any):
+    return [p() for p in container.traverse(types=[provider_type])]

@@ -11,7 +11,7 @@ from faststream.rabbit import (
 )
 from pymongo.asynchronous.database import AsyncDatabase
 
-from src.app.container import list_providers
+from src.app.utils import list_providers
 from src.module.common.container import CommonContainer
 from src.module.common.infrastructure.faststream.integration_events_bus import (
     FastStreamIntegrationEventsBus,

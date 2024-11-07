@@ -1,11 +1,10 @@
-from typing import Any
-
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from faststream.rabbit import RabbitRouter
 
 from src.app.api import build_fastapi
 from src.app.fast_stream import build_app, build_broker, build_exchange, build_router
+from src.app.utils import list_providers
 from src.app.worker import build_celery
 from src.config.celery import CelerySettings
 from src.config.fast_stream import FastStreamSettings
@@ -13,10 +12,6 @@ from src.config.mongodb import MongoDBSettings
 from src.module.common.infrastructure import mongodb
 from src.module.container import ModuleContainer
 from src.module.providers import IntegrationEventSubscriberProvider
-
-
-def list_providers(container: DeclarativeContainer, provider_type: Any):
-    return [p() for p in container.traverse(types=[provider_type])]
 
 
 class CeleryContainer(DeclarativeContainer):
