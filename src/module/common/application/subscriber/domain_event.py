@@ -13,4 +13,4 @@ class LoggerDomainEventSubscriber(DomainEventSubscriber[DomainEvent]):
         return DomainEvent
 
     async def handle_event(self, event: DomainEvent):
-        logger.debug(f"New event triggered: {event.__class__.__qualname__}")
+        logger.info(f"New event triggered: {repr(event)}")
