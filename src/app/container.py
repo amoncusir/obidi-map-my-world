@@ -46,7 +46,7 @@ class FastStream(DeclarativeContainer):
         exchange=exchange,
     )
 
-    broker = providers.Singleton(
+    broker = providers.Resource(
         build_broker,
         settings=settings,
         router=router,
