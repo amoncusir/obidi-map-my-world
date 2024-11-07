@@ -1,7 +1,11 @@
 ---
 
 debug: true
+name: 'OrbidiMapMyWorld'
 
 mongodb:
   url: "mongodb://dev:dev@localhost:27017/"
   database: 'myworld'
+
+celery:
+  broker_url: amqp://dev:dev@localhost:5672//

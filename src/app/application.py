@@ -1,5 +1,6 @@
 import os
 
+from celery import Celery
 from fastapi import FastAPI
 
 from src.app.container import MainContainer
