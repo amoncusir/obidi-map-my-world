@@ -9,8 +9,9 @@ from src.module.providers import DomainEventSubscriberProvider
 
 
 class DomainEventSubscriber(DeclarativeContainer):
+    pass
 
-    logger_events = DomainEventSubscriberProvider(LoggerDomainEventSubscriber)
+    # logger_events = DomainEventSubscriberProvider(LoggerDomainEventSubscriber)
 
 
 class CommonContainer(DeclarativeContainer):
