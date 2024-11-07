@@ -1,6 +1,5 @@
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
-from faststream.rabbit import RabbitRouter
 
 from src.app.api import build_fastapi
 from src.app.fast_stream import build_app, build_broker, build_exchange, build_router
@@ -27,13 +26,24 @@ class CeleryContainer(DeclarativeContainer):
 
 class FastStream(DeclarativeContainer):
     config = providers.Configuration()
-    router = providers.Dependency(RabbitRouter)
+    subscribers = providers.Dependency(list)
 
     settings = providers.Factory(
         FastStreamSettings,
         url=config.url,
         app_id=config.app_id,
         exchange_name=config.exchange_name,
+    )
+
+    exchange = providers.Singleton(
+        build_exchange,
+        settings=settings,
+    )
+
+    router = providers.Singleton(
+        build_router,
+        subscribers=subscribers,
+        exchange=exchange,
     )
 
     broker = providers.Singleton(
@@ -45,11 +55,6 @@ class FastStream(DeclarativeContainer):
     app = providers.Singleton(
         build_app,
         broker=broker,
-    )
-
-    exchange = providers.Singleton(
-        build_exchange,
-        settings=settings,
     )
 
 
@@ -66,13 +71,13 @@ class MainContainer(DeclarativeContainer):
 
     __self__ = providers.Self()
 
-    faststream_router = providers.Singleton(
-        build_router, subscribers=providers.Factory(list_providers, __self__, IntegrationEventSubscriberProvider)
-    )
-
     celery = providers.Container(CeleryContainer, config=config.celery)
-    faststream = providers.Container(FastStream, config=config.faststream, router=faststream_router)
     mongodb = providers.Container(MongoContainer, config=config.mongodb)
+    faststream = providers.Container(
+        FastStream,
+        config=config.faststream,
+        subscribers=providers.Factory(list_providers, __self__, IntegrationEventSubscriberProvider),
+    )
 
     api = providers.Singleton(
         build_fastapi,

@@ -45,7 +45,9 @@ class Repository(DeclarativeContainer):
 class DomainEventSubscriber(DeclarativeContainer):
     integration_event_bus = providers.Dependency(IntegrationEventsBus)
 
-    publish_event = DomainEventSubscriberProvider(PublishEventWhenCreatedPlaceDomainSubscriber)
+    publish_event = DomainEventSubscriberProvider(
+        PublishEventWhenCreatedPlaceDomainSubscriber, integration_event_bus=integration_event_bus
+    )
 
 
 class Command(DeclarativeContainer):

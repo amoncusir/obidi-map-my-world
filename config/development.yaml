@@ -8,4 +8,9 @@ mongodb:
   database: 'myworld'
 
 celery:
-  broker_url: amqp://dev:dev@localhost:5672//
+  broker_url: 'amqp://dev:dev@localhost:5672//'
+
+faststream:
+  url: 'amqp://dev:dev@localhost:5672//'
+  app_id: 'map-my-world'
+  exchange_name: 'eventsource'

@@ -6,5 +6,5 @@ class FastStreamSettings(BaseModel):
 
     url: str = Field(...)
     app_id: str = Field(...)
-    exchange_name: str = Field(...)
+    exchange_name: str = Field(..., exclude=True)
     fail_fast: bool = Field(default=True)
