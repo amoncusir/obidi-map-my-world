@@ -17,9 +17,6 @@ class Application(metaclass=Singleton):
         self.container.config.from_yaml(config_path, required=True)
         self.container.init_resources()
 
-        signal.signal(signal.SIGINT, self.shutdown)
-        signal.signal(signal.SIGTERM, self.shutdown)
-
     def shutdown(self):
         self.container.shutdown()
 
