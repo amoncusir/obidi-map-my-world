@@ -15,7 +15,8 @@ from src.module.common.application.event.integration import IntegrationEventSubs
 
 
 def build_app(broker: RabbitBroker) -> FastStream:
-    return FastStream(broker)
+    app = FastStream(broker)
+    yield app
 
 
 def build_router(exchange: RabbitExchange, subscribers: List[IntegrationEventSubscriber]) -> RabbitRouter:
@@ -39,7 +40,12 @@ def build_route_handler(exchange: RabbitExchange, subs: IntegrationEventSubscrib
 def build_broker(settings: FastStreamSettings, router: RabbitRouter) -> RabbitBroker:
     broker = RabbitBroker(**settings.model_dump())
     broker.include_router(router, include_in_schema=True)
-    return broker
+
+    broker.connect()
+
+    yield broker
+
+    broker.close()
 
 
 def build_exchange(settings: FastStreamSettings) -> RabbitExchange:
