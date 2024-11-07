@@ -10,7 +10,7 @@ from src.module.common.domain.values import GenericUUID
 EventID = TypeVar("EventID", bound=UUID)
 
 
-class ApplicationEvent(BaseModel):
+class IntegrationEvent(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     id: EventID = Field(default_factory=GenericUUID.next_id, kw_only=True)
