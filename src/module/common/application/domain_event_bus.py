@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from asyncio import TaskGroup
 from functools import singledispatchmethod
 from logging import getLogger
@@ -25,7 +26,13 @@ class DomainEventBus:
             if issubclass(event_type, subscriber.event_type()):
                 subscribers.append(subscriber)
 
-        logger.debug("Founded %d subscribers for event %s", len(subscribers), event_type)
+        if logger.isEnabledFor(logging.WARNING):
+            subscribers_len = len(subscribers)
+
+            if subscribers_len == 0:
+                logger.warning("No subscribers found for event %s", event_type)
+            else:
+                logger.debug("Founded %d subscribers for event %s", subscribers_len, event_type)
 
         return subscribers
 
