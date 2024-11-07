@@ -10,6 +10,9 @@ from src.module.manager.application.command.add_review_on_place import (
 from src.module.manager.application.command.create_category import (
     CreateCategoryCommandHandler,
 )
+from src.module.manager.application.domain_event.create_place import (
+    PublishEventWhenCreatedPlaceDomainSubscriber,
+)
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.place import PlaceRepository
 from src.module.manager.infrastructure.mongodb.category_repository import (
@@ -34,7 +37,7 @@ class Repository(DeclarativeContainer):
 
 
 class DomainEventSubscriber(DeclarativeContainer):
-    pass
+    publish_event = providers.Singleton(PublishEventWhenCreatedPlaceDomainSubscriber)
 
 
 class Command(DeclarativeContainer):
