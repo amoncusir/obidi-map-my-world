@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from src.app.router import router
+from src.app.fast_api_router import router
 
 
 def build_fastapi(**kwargs) -> FastAPI:
