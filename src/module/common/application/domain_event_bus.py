@@ -41,7 +41,7 @@ class DomainEventBus:
         return self.find_subscribers(type(event))
 
     async def async_trigger(self, event: DomainEvent):
-        logger.debug("Event triggered: %s", event)
+        logger.debug("Event triggered: %s", repr(event))
 
         subscribers: List[DomainEventSubscriber] = self.find_subscribers(event)
 
