@@ -4,6 +4,7 @@ from dependency_injector.containers import DeclarativeContainer
 from src.app.api import build_fastapi
 from src.app.worker import build_celery
 from src.config.celery import CelerySettings
+from src.config.fast_stream import FastStreamSettings
 from src.config.mongodb import MongoDBSettings
 from src.module.common.infrastructure import mongodb
 from src.module.container import ModuleContainer
@@ -23,10 +24,8 @@ class CeleryContainer(DeclarativeContainer):
 class MongoContainer(DeclarativeContainer):
     config = providers.Configuration()
 
-    settings = providers.Singleton(MongoDBSettings, url=config.url.required(), database=config.database)
-
+    settings = providers.Factory(MongoDBSettings, url=config.url.required(), database=config.database)
     client = providers.Factory(mongodb.build_client, settings=settings)
-
     database = providers.Factory(mongodb.get_database, client=client, settings=settings)
 
 
@@ -34,11 +33,8 @@ class MainContainer(DeclarativeContainer):
     config = providers.Configuration()
 
     celery = providers.Container(CeleryContainer, config=config.celery)
-
-    mongodb = providers.Container(
-        MongoContainer,
-        config=config.mongodb,
-    )
+    faststream = providers.Container(FastStream, config=config.faststream)
+    mongodb = providers.Container(MongoContainer, config=config.mongodb)
 
     api = providers.Singleton(
         build_fastapi,
