@@ -17,6 +17,7 @@ class Application(metaclass=Singleton):
 
         self.container = MainContainer()
         self.container.config.from_yaml(config_path, required=True)
+        self.container.init_resources()
 
     @classmethod
     def remove_instance(cls):
