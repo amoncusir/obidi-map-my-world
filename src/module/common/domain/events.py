@@ -19,11 +19,9 @@ class DomainEventSubscriber[Event: DomainEvent]:
 
     async def __call__(self, event: Event):
         start = datetime.now()
-        self.log.debug("Handled Command: %s", event)
-
         result = await self.handle_event(event)
 
-        self.log.debug("Finished Command on time (%s): %s", datetime.now() - start, event)
+        self.log.debug("Handled Event on time (%s): %s", datetime.now() - start, repr(event))
 
         return result
 

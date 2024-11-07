@@ -28,6 +28,3 @@ def configure_logger():
     project_logger.setLevel(DEBUG)
     project_logger.addHandler(handler)
     project_logger.propagate = False
-
-
-configure_logger()
