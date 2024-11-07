@@ -5,11 +5,10 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from pymongo.asynchronous.database import AsyncDatabase
 
-from src.module.common.application.command_bus import CommandBus
-from src.module.common.application.domain_event_bus import DomainEventBus
 from src.module.common.container import CommonContainer
-from src.module.common.infrastructure.celery.integration_events_bus import (
-    CeleryIntegrationEventsBus,
+from src.module.common.infrastructure.inmemory.command_bus import InMemoryCommandBus
+from src.module.common.infrastructure.inmemory.domain_event_bus import (
+    InMemoryDomainEventBus,
 )
 from src.module.geoquerier.container import GeoQuerierContainer
 from src.module.manager.container import ManagerContainer
@@ -30,14 +29,14 @@ class ModuleContainer(DeclarativeContainer):
     __self__ = providers.Self()
 
     domain_event_bus = providers.Singleton(
-        DomainEventBus, subscribers=providers.Factory(list_providers, __self__, DomainEventSubscriberProvider)
+        InMemoryDomainEventBus, subscribers=providers.Factory(list_providers, __self__, DomainEventSubscriberProvider)
     )
 
     command_bus = providers.Singleton(
-        CommandBus, handlers=providers.Factory(list_providers, __self__, CommandHandlerProvider)
+        InMemoryCommandBus, handlers=providers.Factory(list_providers, __self__, CommandHandlerProvider)
     )
 
-    integration_event_bus = providers.Singleton(CeleryIntegrationEventsBus, celery=celery)
+    integration_event_bus = providers.Singleton(object)
 
     common_container = providers.Container(
         CommonContainer,

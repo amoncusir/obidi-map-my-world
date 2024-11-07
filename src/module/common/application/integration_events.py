@@ -14,7 +14,7 @@ class IntegrationEvent(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     id: EventID = Field(default_factory=GenericUUID.next_id, kw_only=True)
-    created_at: datetime = Field(default_factory=datetime.now, kw_only=True)
+    event_created_at: datetime = Field(default_factory=datetime.now, kw_only=True)
 
     @classmethod
     @abstractmethod
