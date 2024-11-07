@@ -4,7 +4,7 @@ from functools import singledispatchmethod
 from logging import getLogger
 from typing import List, Type
 
-from src.module.common.application.domain_event_bus import DomainEventBus
+from src.module.common.application.event.domain_bus import DomainEventBus
 from src.module.common.domain.events import DomainEvent, DomainEventSubscriber
 
 logger = getLogger(__name__)

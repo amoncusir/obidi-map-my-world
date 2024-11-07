@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Type
 
-from src.module.common.application.integration_events_bus import IntegrationEventsBus
+from src.module.common.application.event.integration_bus import IntegrationEventsBus
 from src.module.common.domain.events import DomainEventSubscriber
 from src.module.manager.application.integration_events.events import (
     CreatedPlaceApplicationEvent,
@@ -24,4 +24,4 @@ class PublishCreatedPlaceEventApplication(DomainEventSubscriber[CreatedPlaceDoma
             place_projection=projection,
         )
 
-        await self.integration_event_bus.async_trigger(integration_event)
+        await self.integration_event_bus.async_publish(integration_event)

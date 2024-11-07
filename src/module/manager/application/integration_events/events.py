@@ -1,6 +1,4 @@
-from pydantic import Field
-
-from src.module.common.application.integration_events import IntegrationEvent
+from src.module.common.application.event.integration import IntegrationEvent
 from src.module.manager.domain.place.projections import (
     NewPlaceProjection,
     NewReviewedPlaceProjection,

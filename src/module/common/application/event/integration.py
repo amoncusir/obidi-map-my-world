@@ -1,10 +1,11 @@
 from abc import abstractmethod
 from datetime import datetime
-from typing import TypeVar
+from typing import Type, TypeVar
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.module.common.application.event.base import BaseEventSubscriber
 from src.module.common.domain.values import GenericUUID
 
 EventID = TypeVar("EventID", bound=UUID)
@@ -19,3 +20,12 @@ class IntegrationEvent(BaseModel):
     @classmethod
     @abstractmethod
     def name(cls) -> str: ...
+
+
+class IntegrationEventSubscriber[Event: IntegrationEvent](BaseEventSubscriber[Event]):
+    @abstractmethod
+    async def handle_event(self, event: Event): ...
+
+    @classmethod
+    @abstractmethod
+    def event_type(cls) -> Type[Event]: ...

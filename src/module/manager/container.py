@@ -2,7 +2,7 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from pymongo.asynchronous.database import AsyncDatabase
 
-from src.module.common.application.domain_event_bus import DomainEventBus
+from src.module.common.application.event.domain_bus import DomainEventBus
 from src.module.manager.application.command import CreatePlaceCommandHandler
 from src.module.manager.application.command.add_review_on_place import (
     AddReviewOnPlaceCommandHandler,
