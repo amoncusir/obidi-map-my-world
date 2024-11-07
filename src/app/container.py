@@ -21,6 +21,17 @@ class CeleryContainer(DeclarativeContainer):
     celery = providers.Singleton(build_celery, settings=settings)
 
 
+class FastStream(DeclarativeContainer):
+    config = providers.Configuration()
+
+    settings = providers.Factory(
+        FastStreamSettings,
+        url=config.url,
+        fail_fast=True,
+        app_id=config.app_id,
+    )
+
+
 class MongoContainer(DeclarativeContainer):
     config = providers.Configuration()
 
