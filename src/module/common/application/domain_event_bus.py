@@ -4,6 +4,7 @@ from functools import singledispatchmethod
 from logging import getLogger
 from typing import List, Type
 
+from src.module.common.domain.aggregates import AggregateRoot
 from src.module.common.domain.events import DomainEvent, DomainEventSubscriber
 
 logger = getLogger(__name__)
@@ -53,3 +54,9 @@ class DomainEventBus:
     def trigger_list(self, events: List[DomainEvent]):
         loop = asyncio.get_event_loop()
         loop.create_task(self.async_trigger_list(events))
+
+    async def async_trigger_aggregate(self, aggregate: AggregateRoot):
+        await self.async_trigger_list(aggregate.pop_events())
+
+    def trigger_aggregate(self, aggregate: AggregateRoot):
+        self.trigger_list(aggregate.pop_events())
