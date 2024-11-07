@@ -28,4 +28,8 @@ class IntegrationEventSubscriber[Event: IntegrationEvent](BaseEventSubscriber[Ev
 
     @classmethod
     @abstractmethod
-    def subscription_topic(cls) -> str: ...
+    def name(cls) -> str: ...
+
+    @classmethod
+    @abstractmethod
+    def routing_key(cls) -> str: ...
