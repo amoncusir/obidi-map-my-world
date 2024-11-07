@@ -50,4 +50,5 @@ class MainContainer(DeclarativeContainer):
         ModuleContainer,
         config=config.module,
         database=mongodb.database,
+        celery=celery.celery,
     )
