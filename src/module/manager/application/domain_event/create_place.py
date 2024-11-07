@@ -1,14 +1,27 @@
+from dataclasses import dataclass
 from typing import Type
 
+from src.module.common.application.integration_events_bus import IntegrationEventsBus
 from src.module.common.domain.events import DomainEventSubscriber
+from src.module.manager.application.integration_events.events import (
+    CreatedPlaceApplicationEvent,
+)
 from src.module.manager.domain.place.events import CreatedPlaceDomainEvent
 
 
-class CreatePlaceDomainEventSubscriber(DomainEventSubscriber[CreatedPlaceDomainEvent]):
+@dataclass
+class PublishCreatedPlaceEventApplication(DomainEventSubscriber[CreatedPlaceDomainEvent]):
+
+    integration_event_bus: IntegrationEventsBus
 
     @classmethod
     def event_type(cls) -> Type[CreatedPlaceDomainEvent]:
         return CreatedPlaceDomainEvent
 
     async def handle_event(self, event: CreatedPlaceDomainEvent):
-        pass
+        projection = event.new_place
+        integration_event = CreatedPlaceApplicationEvent(
+            place_projection=projection,
+        )
+
+        await self.integration_event_bus.async_trigger(integration_event)
