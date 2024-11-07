@@ -58,4 +58,4 @@ class Place(AggregateRoot[PlaceID]):
         self._add_event(ReviewAddedDomainEvent(projection=NewReviewedPlaceProjection.from_entity(self)))
 
     def get_reviews(self) -> List[Review]:
-        return self.reviews.copy()
+        return [r.model_copy(deep=True) for r in self.reviews]
