@@ -1,12 +1,12 @@
 from src.module.common.domain.events import DomainEvent
 from src.module.manager.domain.place.projections import (
-    NewPlaceProjection,
     NewReviewedPlaceProjection,
+    PlaceProjection,
 )
 
 
 class CreatedPlaceDomainEvent(DomainEvent):
-    new_place: NewPlaceProjection
+    new_place: PlaceProjection
 
 
 class UpdatedPlaceDomainEvent(DomainEvent):
