@@ -1,9 +1,6 @@
 import os
 import signal
 
-from celery import Celery
-from fastapi import FastAPI
-
 from src.app.container import MainContainer
 from src.app.utils import Singleton
 from src.module.common.application.command_bus import CommandBus
@@ -39,9 +36,13 @@ class Application(metaclass=Singleton):
         return self.container.module_container.command_bus()
 
     @property
-    def api(self) -> FastAPI:
+    def api(self):
         return self.container.api()
 
     @property
-    def celery(self) -> Celery:
+    def celery(self):
         return self.container.celery.celery()
+
+    @property
+    def faststream(self):
+        return self.container.faststream.app()

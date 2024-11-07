@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, FastAPI
 
 # Module routers
 from src.module.common.application.http import router as common_router
@@ -12,3 +12,11 @@ router.include_router(common_router)
 router.include_router(geoquerier_router)
 router.include_router(manager_router)
 router.include_router(recommendation_router)
+
+
+def build_fastapi(**kwargs) -> FastAPI:
+    api = FastAPI(**kwargs)
+
+    api.include_router(router)
+
+    return api

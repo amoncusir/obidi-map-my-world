@@ -37,4 +37,4 @@ run-services:
 
 .PHONY: run-api
 run-api:
-	fastapi dev --app api 'src/app/api_instance.py'
+	fastapi dev --app api 'src/app/instances/api.py'

@@ -1,10 +1,10 @@
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
-from src.app.api import build_fastapi
+from src.app.celery import build_celery
+from src.app.fast_api import build_fastapi
 from src.app.fast_stream import build_app, build_broker, build_exchange, build_router
 from src.app.utils import list_providers
-from src.app.worker import build_celery
 from src.config.celery import CelerySettings
 from src.config.fast_stream import FastStreamSettings
 from src.config.mongodb import MongoDBSettings
