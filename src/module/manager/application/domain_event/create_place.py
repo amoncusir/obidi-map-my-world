@@ -10,7 +10,7 @@ from src.module.manager.domain.place.events import CreatedPlaceDomainEvent
 
 
 @dataclass
-class PublishCreatedPlaceEventApplication(DomainEventSubscriber[CreatedPlaceDomainEvent]):
+class PublishEventWhenCreatedPlaceDomainSubscriber(DomainEventSubscriber[CreatedPlaceDomainEvent]):
 
     integration_event_bus: IntegrationEventsBus
 
