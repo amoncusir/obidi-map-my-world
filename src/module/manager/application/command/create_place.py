@@ -54,7 +54,6 @@ class CreatePlaceCommandHandler(CommandHandler[CreatePlace, CreatePlaceResult]):
 
         place_id = await self.place_repository.create_place(place)
 
-        events = place.pop_events()
-        self.domain_event_bus.trigger_list(events)
+        self.domain_event_bus.trigger_aggregate(place)
 
         return CreatePlaceResult(place_id=place_id)

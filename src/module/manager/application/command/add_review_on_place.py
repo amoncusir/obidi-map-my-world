@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Type
 
+from src.module.common.application.domain_event_bus import DomainEventBus
 from src.module.common.domain.command import Command, CommandHandler, CommandResult
 from src.module.common.domain.errors import DomainError
 from src.module.manager.domain.place import PlaceRepository
@@ -27,6 +28,7 @@ class AddReviewOnPlaceResult(CommandResult):
 @dataclass
 class AddReviewOnPlaceCommandHandler(CommandHandler[AddReviewOnPlace, AddReviewOnPlaceResult]):
     place_repository: PlaceRepository
+    domain_event_bus: DomainEventBus
 
     @classmethod
     def command_type(cls) -> Type[AddReviewOnPlace]:
@@ -42,5 +44,7 @@ class AddReviewOnPlaceCommandHandler(CommandHandler[AddReviewOnPlace, AddReviewO
         place.add_review(review)
 
         await self.place_repository.save_last_review(place)
+
+        self.domain_event_bus.trigger_aggregate(place)
 
         return AddReviewOnPlaceResult()
