@@ -5,9 +5,13 @@ from src.module.manager.domain.place.projections import (
 )
 
 
-class ReviewAddedDomainEvent(DomainEvent):
-    projection: NewReviewedPlaceProjection
-
-
 class CreatedPlaceDomainEvent(DomainEvent):
     projection: NewPlaceProjection
+
+
+class UpdatedPlaceDomainEvent(DomainEvent):
+    pass
+
+
+class ReviewAddedDomainEvent(UpdatedPlaceDomainEvent):
+    projection: NewReviewedPlaceProjection
