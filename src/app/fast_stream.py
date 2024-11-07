@@ -20,9 +20,6 @@ def build_app(broker: RabbitBroker) -> FastStream:
 
 def build_router(exchange: RabbitExchange, subscribers: List[IntegrationEventSubscriber]) -> RabbitRouter:
     router = RabbitRouter(handlers=(build_route_handler(exchange, sub) for sub in subscribers))
-
-    print(subscribers)
-
     return router
 
 
