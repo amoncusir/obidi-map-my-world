@@ -1,14 +1,6 @@
-from celery import Celery
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
-from faststream.rabbit import (
-    ExchangeType,
-    RabbitBroker,
-    RabbitExchange,
-    RabbitQueue,
-    RabbitRoute,
-    RabbitRouter,
-)
+from faststream.rabbit import RabbitBroker, RabbitExchange
 from pymongo.asynchronous.database import AsyncDatabase
 
 from src.app.utils import list_providers
@@ -30,7 +22,6 @@ class ModuleContainer(DeclarativeContainer):
     config = providers.Configuration()
 
     database = providers.Dependency(AsyncDatabase)
-    celery = providers.Dependency(Celery)
     rabbit_broker = providers.Dependency(RabbitBroker)
     rabbit_exchange = providers.Dependency(RabbitExchange)
 

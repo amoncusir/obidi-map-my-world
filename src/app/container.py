@@ -2,8 +2,7 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
 from src.app.celery import build_celery
-from src.app.fast_api import build_fastapi
-from src.app.fast_stream import build_app, build_broker, build_exchange, build_router
+from src.app.fast_stream import build_broker, build_exchange, build_router
 from src.app.utils import list_providers
 from src.config.celery import CelerySettings
 from src.config.fast_stream import FastStreamSettings
@@ -52,11 +51,6 @@ class FastStream(DeclarativeContainer):
         router=router,
     )
 
-    app = providers.Resource(
-        build_app,
-        broker=broker,
-    )
-
 
 class MongoContainer(DeclarativeContainer):
     config = providers.Configuration()
@@ -79,17 +73,10 @@ class MainContainer(DeclarativeContainer):
         subscribers=providers.Factory(list_providers, __self__, IntegrationEventSubscriberProvider),
     )
 
-    api = providers.Singleton(
-        build_fastapi,
-        title=config.name,
-        debug=config.debug.as_(bool),
-    )
-
     module_container = providers.Container(
         ModuleContainer,
         config=config.module,
         database=mongodb.database,
-        celery=celery.celery,
         rabbit_broker=faststream.broker,
         rabbit_exchange=faststream.exchange,
     )

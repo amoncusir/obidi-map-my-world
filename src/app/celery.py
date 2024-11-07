@@ -1,11 +1,9 @@
-from typing import Optional
-
 from celery import Celery
 
 from src.config.celery import CelerySettings
 
 
-def build_celery(settings: Optional[CelerySettings]) -> Celery:
+def build_celery(settings: CelerySettings) -> Celery:
     instance = Celery(
         "worker",
         include=[

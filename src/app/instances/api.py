@@ -4,6 +4,8 @@
 DO NOT import this module!
 """
 
+from contextlib import asynccontextmanager
+
 from src.app.logger import configure_logger
 
 configure_logger()
@@ -11,4 +13,13 @@ configure_logger()
 
 from src.app.application import Application  # nopep8
 
-api = Application().api
+application = Application()
+
+
+@asynccontextmanager
+async def start(_):
+    await application.start()
+    yield
+
+
+api = application.api(lifespan=start)
