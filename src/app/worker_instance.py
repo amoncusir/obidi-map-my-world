@@ -9,6 +9,6 @@ from src.app.logger import configure_logger
 configure_logger()
 
 
-from src.app import application  # nopep8
+from src.app.application import Application  # nopep8
 
-celery = application().celery
+celery = Application().celery
