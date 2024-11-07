@@ -1,7 +1,7 @@
 from src.module.common.application.event.integration import IntegrationEvent
 from src.module.manager.domain.place.projections import (
-    NewReviewedPlaceProjection,
     PlaceProjection,
+    ReviewProjection,
 )
 
 
@@ -22,7 +22,7 @@ class UpdatedPlaceApplicationEvent(IntegrationEvent):
 
 
 class ReviewAddedApplicationEvent(UpdatedPlaceApplicationEvent):
-    new_review_place: NewReviewedPlaceProjection
+    added_review: ReviewProjection
 
     @classmethod
     def name(cls) -> str:

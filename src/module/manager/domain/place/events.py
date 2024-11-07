@@ -1,7 +1,7 @@
 from src.module.common.domain.events import DomainEvent
 from src.module.manager.domain.place.projections import (
-    NewReviewedPlaceProjection,
     PlaceProjection,
+    ReviewProjection,
 )
 
 
@@ -10,8 +10,8 @@ class CreatedPlaceDomainEvent(DomainEvent):
 
 
 class UpdatedPlaceDomainEvent(DomainEvent):
-    pass
+    place_projection: PlaceProjection
 
 
 class ReviewAddedDomainEvent(UpdatedPlaceDomainEvent):
-    new_review_place: NewReviewedPlaceProjection
+    added_review: ReviewProjection

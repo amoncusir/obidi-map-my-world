@@ -14,8 +14,8 @@ from src.module.manager.domain.place.events import (
     ReviewAddedDomainEvent,
 )
 from src.module.manager.domain.place.projections import (
-    NewReviewedPlaceProjection,
     PlaceProjection,
+    ReviewProjection,
 )
 
 ReviewID = TypeVar("ReviewID", bound=uuid.UUID)
@@ -55,7 +55,12 @@ class Place(AggregateRoot[PlaceID]):
         self.reviews.append(review)
         self._update()
 
-        self._add_event(ReviewAddedDomainEvent(new_review_place=NewReviewedPlaceProjection.from_entity(self)))
+        self._add_event(
+            ReviewAddedDomainEvent(
+                place_projection=PlaceProjection.from_entity(self),
+                added_review=ReviewProjection.from_entity(review),
+            )
+        )
 
     def get_reviews(self) -> List[Review]:
         return [r.model_copy(deep=True) for r in self.reviews]

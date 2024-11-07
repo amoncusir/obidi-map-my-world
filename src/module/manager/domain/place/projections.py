@@ -33,15 +33,3 @@ class PlaceProjection(EntityProjection[str]):
             category=entity.category,
             reviews=[ReviewProjection.from_entity(r) for r in entity.reviews],
         )
-
-
-class NewReviewedPlaceProjection(PlaceProjection):
-    added_review: ReviewProjection
-
-    @classmethod
-    def from_entity(cls, entity: "Place") -> Self:
-        parent = super().from_entity(entity)
-        return NewReviewedPlaceProjection(
-            **parent.model_dump(),
-            added_review=ReviewProjection.from_entity(entity.last_review),
-        )
