@@ -24,6 +24,12 @@ class MainContainer(DeclarativeContainer):
         config=config.mongodb,
     )
 
+    api = providers.Singleton(
+        build_fastapi,
+        title=config.name,
+        debug=config.debug.as_(bool),
+    )
+
     module_container = providers.Container(
         ModuleContainer,
         config=config.module,
