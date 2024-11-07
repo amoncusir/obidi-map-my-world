@@ -19,6 +19,7 @@ dependency-injector = "^4.43.0"
 pyyaml = "^6.0.2"
 pymongo = "^4.10.1"
 celery = {extras = ["librabbitmq"], version = "^5.4.0"}
+faststream = {extras = ["rabbit"], version = "^0.5.29"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.3"
