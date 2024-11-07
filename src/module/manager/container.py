@@ -10,9 +10,6 @@ from src.module.manager.application.command.add_review_on_place import (
 from src.module.manager.application.command.create_category import (
     CreateCategoryCommandHandler,
 )
-from src.module.manager.application.subscriber.domain_event import (
-    LoggerDomainEventSubscriber,
-)
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.place import PlaceRepository
 from src.module.manager.infrastructure.mongodb.category_repository import (
@@ -21,7 +18,7 @@ from src.module.manager.infrastructure.mongodb.category_repository import (
 from src.module.manager.infrastructure.mongodb.place_repository import (
     MongoPlaceRepository,
 )
-from src.module.providers import CommandHandlerProvider, DomainEventSubscriberProvider
+from src.module.providers import CommandHandlerProvider
 
 
 class Repository(DeclarativeContainer):
@@ -37,10 +34,7 @@ class Repository(DeclarativeContainer):
 
 
 class DomainEventSubscriber(DeclarativeContainer):
-
-    logger_events = DomainEventSubscriberProvider(LoggerDomainEventSubscriber)
-
-    list = providers.List(logger_events)
+    pass
 
 
 class Command(DeclarativeContainer):
@@ -59,7 +53,7 @@ class Command(DeclarativeContainer):
     )
 
     add_review_on_place = CommandHandlerProvider(
-        AddReviewOnPlaceCommandHandler, place_repository=repository.place_repository
+        AddReviewOnPlaceCommandHandler, place_repository=repository.place_repository, domain_event_bus=domain_event_bus
     )
 
 

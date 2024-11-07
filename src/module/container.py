@@ -6,6 +6,7 @@ from pymongo.asynchronous.database import AsyncDatabase
 
 from src.module.common.application.command_bus import CommandBus
 from src.module.common.application.domain_event_bus import DomainEventBus
+from src.module.common.container import CommonContainer
 from src.module.geoquerier.container import GeoQuerierContainer
 from src.module.manager.container import ManagerContainer
 from src.module.providers import CommandHandlerProvider, DomainEventSubscriberProvider
@@ -27,6 +28,11 @@ class ModuleContainer(DeclarativeContainer):
 
     command_bus = providers.Singleton(
         CommandBus, handlers=providers.Singleton(list_providers, __self__, CommandHandlerProvider)
+    )
+
+    common_container = providers.Container(
+        CommonContainer,
+        domain_event_bus=domain_event_bus,
     )
 
     manager_container = providers.Container(
