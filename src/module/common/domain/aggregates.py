@@ -17,3 +17,6 @@ class AggregateRoot[ID](DomainEntity[ID]):
         flushed_events = self.__events_queue.copy()
         self.__events_queue = []
         return flushed_events
+
+    def list_events_repr(self) -> List[str]:
+        return [repr(e) for e in self.__events_queue]
