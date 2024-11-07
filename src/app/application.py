@@ -1,4 +1,5 @@
 import os
+import signal
 
 from celery import Celery
 from fastapi import FastAPI
@@ -18,6 +19,12 @@ class Application(metaclass=Singleton):
         self.container = MainContainer()
         self.container.config.from_yaml(config_path, required=True)
         self.container.init_resources()
+
+        signal.signal(signal.SIGINT, self.shutdown)
+        signal.signal(signal.SIGTERM, self.shutdown)
+
+    def shutdown(self):
+        self.container.shutdown()
 
     @classmethod
     def remove_instance(cls):
