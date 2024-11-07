@@ -17,7 +17,3 @@ class BaseEventSubscriber[Event: Any]:
 
     @abstractmethod
     async def handle_event(self, event: Event): ...
-
-    @classmethod
-    @abstractmethod
-    def event_type(cls) -> Type[Event]: ...
