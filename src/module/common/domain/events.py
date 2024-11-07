@@ -11,7 +11,7 @@ from src.module.common.utils import now
 class DomainEvent(BaseModel):
     model_config = ConfigDict(frozen=True)
 
-    created_at: datetime = Field(default_factory=now)
+    event_created_at: datetime = Field(default_factory=now)
 
 
 class DomainEventSubscriber[Event: DomainEvent]:

@@ -6,7 +6,7 @@ from src.module.manager.domain.place.projections import (
 
 
 class CreatedPlaceDomainEvent(DomainEvent):
-    projection: NewPlaceProjection
+    new_place: NewPlaceProjection
 
 
 class UpdatedPlaceDomainEvent(DomainEvent):
@@ -14,4 +14,4 @@ class UpdatedPlaceDomainEvent(DomainEvent):
 
 
 class ReviewAddedDomainEvent(UpdatedPlaceDomainEvent):
-    projection: NewReviewedPlaceProjection
+    new_review_place: NewReviewedPlaceProjection

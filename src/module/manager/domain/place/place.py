@@ -43,7 +43,7 @@ class Place(AggregateRoot[PlaceID]):
     def create_place(cls, *, name: str, location: Location, category: Category) -> Self:
         place = Place(id=None, name=name, location=location, category=CategoryProjection.from_entity(category))
 
-        place._add_event(CreatedPlaceDomainEvent(projection=NewPlaceProjection.from_entity(place)))
+        place._add_event(CreatedPlaceDomainEvent(new_place=NewPlaceProjection.from_entity(place)))
 
         return place
 
@@ -55,7 +55,7 @@ class Place(AggregateRoot[PlaceID]):
         self.reviews.append(review)
         self._update()
 
-        self._add_event(ReviewAddedDomainEvent(projection=NewReviewedPlaceProjection.from_entity(self)))
+        self._add_event(ReviewAddedDomainEvent(new_review_place=NewReviewedPlaceProjection.from_entity(self)))
 
     def get_reviews(self) -> List[Review]:
         return [r.model_copy(deep=True) for r in self.reviews]
