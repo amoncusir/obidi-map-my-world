@@ -14,6 +14,9 @@ from src.module.manager.application.command.create_category import (
 from src.module.manager.application.domain_event.create_place import (
     PublishEventWhenCreatedPlaceDomainSubscriber,
 )
+from src.module.manager.application.domain_event.review_added import (
+    PublishEventWhenReviewAddedDomainSubscriber,
+)
 from src.module.manager.domain.category import CategoryRepository
 from src.module.manager.domain.place import PlaceRepository
 from src.module.manager.infrastructure.mongodb.category_repository import (
@@ -45,8 +48,12 @@ class Repository(DeclarativeContainer):
 class DomainEventSubscriber(DeclarativeContainer):
     integration_event_bus = providers.Dependency(IntegrationEventsBus)
 
-    publish_event = DomainEventSubscriberProvider(
+    publish_event_created_place = DomainEventSubscriberProvider(
         PublishEventWhenCreatedPlaceDomainSubscriber, integration_event_bus=integration_event_bus
+    )
+
+    publish_event_review_added = DomainEventSubscriberProvider(
+        PublishEventWhenReviewAddedDomainSubscriber, integration_event_bus=integration_event_bus
     )
 
 
