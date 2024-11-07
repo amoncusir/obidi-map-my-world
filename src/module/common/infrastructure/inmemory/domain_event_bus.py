@@ -31,7 +31,7 @@ class InMemoryDomainEventBus(DomainEventBus):
             if subscribers_len == 0:
                 logger.warning("No subscribers found for event %s", event_type)
             else:
-                logger.debug("Founded %d subscribers for event %s", subscribers_len, event_type)
+                logger.debug("Founded %d subscribers for event %s :: %s", subscribers_len, event_type, subscribers)
 
         return subscribers
 
