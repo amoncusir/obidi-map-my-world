@@ -1,3 +1,9 @@
+from typing import Any
+
+from pydantic import GetCoreSchemaHandler, TypeAdapter
+from pydantic_core import CoreSchema, core_schema
+
+
 class Score(float):
 
     def __new__(cls, value):
@@ -9,3 +15,7 @@ class Score(float):
             raise ValueError("value must be between 0 and 1")
 
         return super().__new__(cls, value)
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler: GetCoreSchemaHandler) -> CoreSchema:
+        return core_schema.no_info_after_validator_function(cls, handler(float))
