@@ -1,8 +1,5 @@
 from src.module.common.application.event.integration import IntegrationEvent
-from src.module.manager.domain.place.projections import (
-    PlaceProjection,
-    ReviewProjection,
-)
+from src.module.manager import PlaceProjection, ReviewProjection
 
 
 class CreatedPlaceApplicationEvent(IntegrationEvent):

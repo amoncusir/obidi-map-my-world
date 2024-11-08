@@ -7,8 +7,8 @@ from typing_extensions import TypeVar
 from src.module.common.domain.aggregates import AggregateRoot
 from src.module.common.domain.entities import DomainEntity
 from src.module.common.domain.values import GenericUUID, Location
+from src.module.manager import CategoryProjection
 from src.module.manager.domain.category import Category
-from src.module.manager.domain.category.projections import CategoryProjection
 from src.module.manager.domain.place.events import (
     CreatedPlaceDomainEvent,
     ReviewAddedDomainEvent,

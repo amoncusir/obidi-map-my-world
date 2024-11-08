@@ -12,7 +12,7 @@ from src.module.common.infrastructure.mongodb.document import (
     Document,
     PrincipalDocument,
 )
-from src.module.manager.domain.category.projections import CategoryProjection
+from src.module.manager import CategoryProjection
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import PlaceID, Review
 from src.module.manager.domain.place.repository import InvalidUpdateOperation

@@ -1,12 +1,12 @@
-from datetime import datetime
 from typing import TYPE_CHECKING, Self
 
 from src.module.common.domain.projections import EntityProjection
-from src.module.common.domain.values import Location
-from src.module.manager.domain.category.projections import CategoryProjection
 
 if TYPE_CHECKING:
-    from src.module.manager.domain.place.place import Place, Review
+    from src.module.common.domain.values import Location
+    from src.module.manager import CategoryProjection
+    from src.module.manager.domain.place import Place
+    from src.module.manager.domain.place.place import Review
 
 
 class ReviewProjection(EntityProjection[str]):
