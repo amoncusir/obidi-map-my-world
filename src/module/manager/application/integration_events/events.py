@@ -10,7 +10,7 @@ class CreatedPlaceApplicationEvent(IntegrationEvent):
 
     @classmethod
     def name(cls) -> str:
-        return "manager.place.created"
+        return "place.created"
 
 
 class UpdatedPlaceApplicationEvent(IntegrationEvent):
@@ -18,7 +18,7 @@ class UpdatedPlaceApplicationEvent(IntegrationEvent):
 
     @classmethod
     def name(cls) -> str:
-        return "manager.place.updated"
+        return "place.updated"
 
 
 class ReviewAddedApplicationEvent(UpdatedPlaceApplicationEvent):
@@ -26,4 +26,4 @@ class ReviewAddedApplicationEvent(UpdatedPlaceApplicationEvent):
 
     @classmethod
     def name(cls) -> str:
-        return "manager.place.updated.review_added"
+        return "place.updated.review_added"
