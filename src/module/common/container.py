@@ -2,16 +2,10 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
 from src.module.common.application.event.domain_bus import DomainEventBus
-from src.module.common.application.event.domain_subscriber import (
-    LoggerDomainEventSubscriber,
-)
-from src.module.providers import DomainEventSubscriberProvider
 
 
 class DomainEventSubscriber(DeclarativeContainer):
     pass
-
-    # logger_events = DomainEventSubscriberProvider(LoggerDomainEventSubscriber)
 
 
 class CommonContainer(DeclarativeContainer):
