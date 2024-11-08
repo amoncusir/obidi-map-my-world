@@ -45,7 +45,9 @@ class MongoCategoryRepository(CategoryRepository):
         logger.debug("New Category: %s", document)
 
         result = await self.mongo_collection.insert_one(document)
-        return str(result.inserted_id)
+        category_id = str(result.inserted_id)
+        category.id = category_id
+        return category_id
 
     async def find_category_by_id(self, category_id: CategoryID) -> Category:
         doc = await self.mongo_collection.find_one({"_id": ObjectId(category_id)})

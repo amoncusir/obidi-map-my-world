@@ -111,7 +111,11 @@ class MongoPlaceRepository(PlaceRepository):
     async def create_place(self, place: Place) -> PlaceID:
         dto = PlaceDTO.from_domain(place)
         result = await self.mongo_collection.insert_one(dto.to_document())
-        return str(result.inserted_id)
+        place_id = str(result.inserted_id)
+
+        place.id = place_id
+
+        return place_id
 
     async def save_last_review(self, place: Place):
         oid = PlaceDTO.get_id(place)
