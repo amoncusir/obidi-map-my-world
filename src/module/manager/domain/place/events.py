@@ -4,7 +4,7 @@ from src.module.manager.domain.place.place import Review
 
 
 class CreatedPlaceDomainEvent(DomainEvent):
-    new_place: Place
+    place: Place
 
 
 class UpdatedPlaceDomainEvent(DomainEvent):

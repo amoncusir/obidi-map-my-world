@@ -28,7 +28,7 @@ class PublishEventWhenCreatedPlaceDomainSubscriber(DomainEventSubscriber[Created
 
     async def handle_event(self, event: CreatedPlaceDomainEvent):
         integration_event = CreatedPlaceApplicationEvent(
-            place_projection=PlaceProjection.from_entity(event.new_place),
+            place_projection=PlaceProjection.from_entity(event.place),
         )
 
         await self.integration_event_bus.async_publish(integration_event)
