@@ -1,7 +1,13 @@
 from dataclasses import dataclass
-from typing import Type
+from typing import Tuple, Type
 
 from src.module.common.domain.events import DomainEventSubscriber
+from src.module.recommendation.domain.evaluator import (
+    DisableIfPlaceIsUpdatedInLast30Days,
+    ReviewCountScoreEvaluator,
+    ScoreEvaluator,
+    StateEvaluator,
+)
 from src.module.recommendation.domain.recommendation.events import (
     UpdatedRecommendationPlaceViewDomainEvent,
     UpdatedRecommendationScoreDomainEvent,
@@ -14,22 +20,7 @@ from src.module.recommendation.domain.recommendation.repository import (
 @dataclass
 class UpdateScoreWhenPlaceIsUpdatedDomainSubscriber(DomainEventSubscriber[UpdatedRecommendationPlaceViewDomainEvent]):
 
-    @classmethod
-    def event_type(cls) -> Type[UpdatedRecommendationPlaceViewDomainEvent]:
-        return UpdatedRecommendationPlaceViewDomainEvent
-
-    async def subscription_event(self, event: UpdatedRecommendationPlaceViewDomainEvent):
-        recommendation = event.recommendation
-
-        recommendation.calculate_score([])
-
-        self._aggregate_events(recommendation)
-
-
-@dataclass
-class UpdateIfIsRecommendableWhenPlaceIsUpdatedDomainSubscriber(
-    DomainEventSubscriber[UpdatedRecommendationPlaceViewDomainEvent]
-):
+    score_evaluators: Tuple[ScoreEvaluator] = (ReviewCountScoreEvaluator(),)
 
     @classmethod
     def event_type(cls) -> Type[UpdatedRecommendationPlaceViewDomainEvent]:
@@ -38,12 +29,28 @@ class UpdateIfIsRecommendableWhenPlaceIsUpdatedDomainSubscriber(
     async def subscription_event(self, event: UpdatedRecommendationPlaceViewDomainEvent):
         recommendation = event.recommendation
 
-        # recommendation.calculate_score([])
+        recommendation.calculate_score(list(self.score_evaluators))
 
         self._aggregate_events(recommendation)
 
 
-class SaveUpdatedScoreRecommendationIfIsDifferentDomainSubscriber(
+class UpdateStatusWhenPlaceIsUpdatedDomainSubscriber(DomainEventSubscriber[UpdatedRecommendationPlaceViewDomainEvent]):
+
+    status_evaluators: Tuple[StateEvaluator] = (DisableIfPlaceIsUpdatedInLast30Days(),)
+
+    @classmethod
+    def event_type(cls) -> Type[UpdatedRecommendationPlaceViewDomainEvent]:
+        return UpdatedRecommendationPlaceViewDomainEvent
+
+    async def subscription_event(self, event: UpdatedRecommendationPlaceViewDomainEvent):
+        recommendation = event.recommendation
+
+        recommendation.update_state(list(self.status_evaluators))
+
+        self._aggregate_events(recommendation)
+
+
+class SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber(
     DomainEventSubscriber[UpdatedRecommendationScoreDomainEvent]
 ):
 
