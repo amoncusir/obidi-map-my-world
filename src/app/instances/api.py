@@ -18,7 +18,9 @@ application = Application()
 
 @asynccontextmanager
 async def start(_):
-    await application.start()
+    application.start()
+    await application.broker.start()
+
     yield
 
 
