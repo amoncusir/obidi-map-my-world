@@ -3,10 +3,11 @@ from dataclasses import dataclass, field
 from typing import Any, Self
 
 from src.module.common.domain.types import DateTime
+from src.module.common.utils import DictSerializable
 
 
 @dataclass(frozen=True, kw_only=True)
-class EntityProjection[ID]:
+class EntityProjection[ID](DictSerializable):
     id: ID
     projected_at: DateTime
     """
