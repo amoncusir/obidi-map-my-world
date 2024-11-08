@@ -76,6 +76,9 @@ class Recommendation(AggregateRoot[RecommendationID]):
         if self.place is None:
             raise ValidationError("place cannot be None")
 
+        if len(evaluators) == 0:
+            return
+
         current_score = self.score
         rates = [e.evaluate(self.place) for e in evaluators]
 
