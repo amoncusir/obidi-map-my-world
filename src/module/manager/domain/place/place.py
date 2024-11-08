@@ -28,11 +28,6 @@ class Review(DomainEntity[ReviewID]):
 
 
 class Place(AggregateRoot[PlaceID]):
-    """
-    To avoid the creation of Factories, I decide to use a class member functions to handle the logic of the
-    factory creation process, but in more complex domains, they will be a must.
-    """
-
     id: Optional[PlaceID] = Field(kw_only=True)
     name: str
     location: Location
@@ -41,6 +36,11 @@ class Place(AggregateRoot[PlaceID]):
 
     @classmethod
     def create_place(cls, *, name: str, location: Location, category: Category) -> Self:
+        """
+        To avoid the creation of Factories, I decide to use a class member functions to handle the logic of the
+        factory creation process, but in more complex domains, they will be a must.
+        """
+
         place = Place(id=None, name=name, location=location, category=CategoryProjection.from_entity(category))
 
         place._add_event(CreatedPlaceDomainEvent(new_place=PlaceProjection.from_entity(place)))
