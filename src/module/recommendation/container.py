@@ -21,10 +21,25 @@ from src.module.recommendation.application.integration_event.handlers import (
     CreatedPlaceIntegrationEventSubscriber,
     ReviewAddedIntegrationEventSubscriber,
 )
+from src.module.recommendation.domain.recommendation.repository import (
+    RecommendationRepository,
+)
+from src.module.recommendation.infrastructure.mongodb.recommendation_repository import (
+    MongoDBRecommendationRepository,
+)
 
 
 class Repository(DeclarativeContainer):
     database = providers.Dependency(AsyncDatabase)
+
+    mongo_recommendation_repository = providers.Singleton(
+        MongoDBRecommendationRepository,
+        database=database,
+    )
+
+    recommendation_repository = providers.Dependency(
+        instance_of=RecommendationRepository, default=mongo_recommendation_repository
+    )
 
 
 class IntegrationEventSubscribers(DeclarativeContainer):
@@ -34,13 +49,13 @@ class IntegrationEventSubscribers(DeclarativeContainer):
     review_added_integration_subscriber = IntegrationEventSubscriberProvider(
         ReviewAddedIntegrationEventSubscriber,
         domain_event_bus=domain_event_bus,
-        recommendation_repository=None,
+        recommendation_repository=repository.recommendation_repository,
     )
 
     place_created_integration_subscriber = IntegrationEventSubscriberProvider(
         CreatedPlaceIntegrationEventSubscriber,
         domain_event_bus=domain_event_bus,
-        recommendation_repository=None,
+        recommendation_repository=repository.recommendation_repository,
     )
 
 
@@ -55,7 +70,8 @@ class DomainEventSubscribers(DeclarativeContainer):
 
     # SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber
     save_updated_score_recommendation = DomainEventSubscriberProvider(
-        SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber, recommendation_repository=None
+        SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber,
+        recommendation_repository=repository.recommendation_repository,
     )
 
 
