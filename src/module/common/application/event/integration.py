@@ -1,8 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Type, TypeVar
-from uuid import UUID
+from typing import Any, Type
 
 from src.module.common.application.event.base import BaseEventSubscriber
 from src.module.common.domain.values import GenericUUID

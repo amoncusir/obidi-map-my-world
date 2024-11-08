@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import GetCoreSchemaHandler, TypeAdapter
+from pydantic import GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
 
 

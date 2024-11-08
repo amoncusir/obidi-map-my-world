@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self, TypeVar
+from typing import Self
 
 from src.module.common.domain.projections import EntityProjection
 from src.module.common.domain.values import Location

@@ -1,6 +1,6 @@
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
-from typing import Any, Dict, Final, Self
+from typing import Any, Dict, Self
 
 from dacite import Config, from_dict
 
