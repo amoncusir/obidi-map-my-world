@@ -23,3 +23,8 @@ class UpdatedRecommendationPlaceViewDomainEvent(UpdatedRecommendationDomainEvent
 class UpdatedRecommendationScoreDomainEvent(UpdatedRecommendationDomainEvent):
     old_score: float
     new_score: float
+
+
+class UpdatedRecommendationStateDomainEvent(UpdatedRecommendationDomainEvent):
+    old_status: bool
+    new_status: bool
