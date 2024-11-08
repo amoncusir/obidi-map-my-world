@@ -34,3 +34,16 @@ class UpdatedPlaceMustBeNewer(Rule):
             raise OlderPlaceWhenUpdateRuleError(
                 f"Place({self.current_place.id}); current_update: {self.new_place.last_update}, new_update: {self.current_place.last_update}"
             )
+
+
+class InvalidWeightTotalScoreRuleError(RuleError):
+    pass
+
+
+@dataclass(frozen=True)
+class TotalWeightScoreMustBeGraterThanZero(Rule):
+    total_weight: float
+
+    def __call__(self):
+        if self.total_weight <= 0:
+            raise InvalidWeightTotalScoreRuleError(f"Invalid weight: {self.total_weight}")
