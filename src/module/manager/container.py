@@ -11,10 +11,8 @@ from src.module.manager.application.command.add_review_on_place import (
 from src.module.manager.application.command.create_category import (
     CreateCategoryCommandHandler,
 )
-from src.module.manager.application.domain_event.create_place import (
+from src.module.manager.application.domain_event.handlers import (
     PublishEventWhenCreatedPlaceDomainSubscriber,
-)
-from src.module.manager.application.domain_event.review_added import (
     PublishEventWhenReviewAddedDomainSubscriber,
 )
 from src.module.manager.domain.category import CategoryRepository
