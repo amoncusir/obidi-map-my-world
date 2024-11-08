@@ -7,7 +7,7 @@ from typing_extensions import Doc
 from src.module.recommendation.domain.recommendation.projections import (
     PlaceViewProjection,
 )
-from src.module.recommendation.domain.recommendation.values import Score
+from src.module.recommendation.domain.values import Score
 
 
 class StateEvaluator:

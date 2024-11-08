@@ -18,7 +18,7 @@ from src.module.recommendation.domain.recommendation.rules import (
     UpdatedPlaceMustBeNewer,
     UpdatedPlaceMustBeSameID,
 )
-from src.module.recommendation.domain.recommendation.values import Score
+from src.module.recommendation.domain.values import Score
 
 RecommendationID = TypeVar("RecommendationID", bound=str)
 
