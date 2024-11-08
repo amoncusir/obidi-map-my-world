@@ -45,6 +45,6 @@ class AddReviewOnPlaceCommandHandler(CommandHandler[AddReviewOnPlace, AddReviewO
 
         await self.place_repository.save_last_review(place)
 
-        await self.domain_event_bus.async_trigger_aggregate(place)
+        await self.domain_event_bus.async_process_aggregate(place)
 
         return AddReviewOnPlaceResult()
