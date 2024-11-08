@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Self
 
 from src.module.common.domain.projections import EntityProjection
+from src.module.common.domain.values import Location
 from src.module.manager.domain.category.projections import CategoryProjection
 
 if TYPE_CHECKING:
@@ -21,6 +22,7 @@ class PlaceProjection(EntityProjection[str]):
     id: str
     created_at: datetime
     name: str
+    location: Location
     category: CategoryProjection
     reviews: list[ReviewProjection]
 
@@ -30,6 +32,7 @@ class PlaceProjection(EntityProjection[str]):
             id=str(entity.id),
             created_at=entity.updated_at,
             name=entity.name,
+            location=entity.location,
             category=entity.category,
             reviews=[ReviewProjection.from_entity(r) for r in entity.reviews],
         )
