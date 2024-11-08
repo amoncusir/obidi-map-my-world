@@ -25,6 +25,7 @@ class CreatedPlaceIntegrationEventSubscriber(IntegrationEventSubscriber[CreatedP
     recommendation_repository: RecommendationRepository
 
     async def handle_event(self, event: CreatedPlaceApplicationEvent):
+        # FIXME: Move that logic to a command!
 
         place_view = PlaceViewProjection.from_entity(event.place_projection)
         recommendation = Recommendation.create(place=place_view)
@@ -51,6 +52,7 @@ class ReviewAddedIntegrationEventSubscriber(IntegrationEventSubscriber[ReviewAdd
     recommendation_repository: RecommendationRepository
 
     async def handle_event(self, event: ReviewAddedApplicationEvent):
+        # FIXME: Move that logic to a command!
 
         recommendation = await self.recommendation_repository.find_recommendation_by_place_id(event.place_projection.id)
 
