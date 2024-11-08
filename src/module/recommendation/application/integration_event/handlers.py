@@ -3,7 +3,9 @@ from dataclasses import dataclass
 from src.module.common.application.event.domain_bus import DomainEventBus
 from src.module.common.application.event.integration import IntegrationEventSubscriber
 from src.module.manager import CreatedPlaceApplicationEvent, ReviewAddedApplicationEvent
-from src.module.recommendation.domain.recommendation.projections import PlaceView
+from src.module.recommendation.domain.recommendation.projections import (
+    PlaceViewProjection,
+)
 from src.module.recommendation.domain.recommendation.recommendation import (
     Recommendation,
 )
@@ -24,14 +26,7 @@ class CreatedPlaceIntegrationEventSubscriber(IntegrationEventSubscriber[CreatedP
 
     async def handle_event(self, event: CreatedPlaceApplicationEvent):
 
-        place_view = PlaceView(
-            id=event.place_projection.id,
-            name=event.place_projection.name,
-            last_update=event.place_projection.projected_at,
-            location=event.place_projection.location,
-            total_reviews=len(event.place_projection.reviews),
-        )
-
+        place_view = PlaceViewProjection.from_entity(event.place_projection)
         recommendation = Recommendation.create(place=place_view)
 
         await self.recommendation_repository.create_recommendation(recommendation)
@@ -59,15 +54,7 @@ class ReviewAddedIntegrationEventSubscriber(IntegrationEventSubscriber[ReviewAdd
 
         recommendation = await self.recommendation_repository.find_recommendation_by_place_id(event.place_projection.id)
 
-        place_view = PlaceView(
-            id=event.place_projection.id,
-            name=event.place_projection.name,
-            last_update=event.place_projection.projected_at,
-            location=event.place_projection.location,
-            total_reviews=len(event.place_projection.reviews),
-        )
-
-        recommendation.update_place(place_view)
+        recommendation.update_place(PlaceViewProjection.from_entity(event.place_projection))
 
         await self.recommendation_repository.update_place_view(recommendation)
         await self.domain_event_bus.async_process_aggregate(recommendation)
