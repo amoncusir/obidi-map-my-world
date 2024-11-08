@@ -39,7 +39,7 @@ class Place(AggregateRoot[PlaceID]):
 
         place = Place(id=None, name=name, location=location, category=CategoryProjection.from_entity(category))
 
-        place._add_event(CreatedPlaceDomainEvent(place=place.model_copy(deep=True)))
+        place._add_event(CreatedPlaceDomainEvent(place=place.duplicate()))
 
         return place
 
@@ -53,8 +53,8 @@ class Place(AggregateRoot[PlaceID]):
 
         self._add_event(
             ReviewAddedDomainEvent(
-                place=self.model_copy(deep=True),
-                added_review=review.model_copy(deep=True),
+                place=self.duplicate(),
+                added_review=review.duplicate(),
             )
         )
 

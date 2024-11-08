@@ -12,6 +12,9 @@ class DomainEntity[ID](BaseModel):
     def _update(self):
         self.updated_at = now()
 
+    def duplicate(self):
+        return self.model_copy(deep=True)
+
     def __eq__(self, other):
         if not isinstance(other, DomainEntity):
             raise NotImplemented()
