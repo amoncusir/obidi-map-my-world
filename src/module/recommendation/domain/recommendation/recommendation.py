@@ -1,16 +1,16 @@
-from datetime import datetime
 from typing import List, Optional, TypeVar
 
 from pydantic import Field, ValidationError
 
 from src.module.common.domain.aggregates import AggregateRoot
-from src.module.common.domain.entities import DomainEntity
-from src.module.common.domain.values import Location
 from src.module.recommendation.domain.evaluator import ScoreEvaluator
 from src.module.recommendation.domain.recommendation.events import (
     CreatedRecommendationDomainEvent,
     UpdatedRecommendationPlaceViewDomainEvent,
     UpdatedRecommendationScoreDomainEvent,
+)
+from src.module.recommendation.domain.recommendation.projections import (
+    PlaceViewProjection,
 )
 from src.module.recommendation.domain.recommendation.rules import (
     TotalWeightScoreMustBeGraterThanZero,
@@ -20,24 +20,16 @@ from src.module.recommendation.domain.recommendation.rules import (
 from src.module.recommendation.domain.recommendation.values import Score
 
 RecommendationID = TypeVar("RecommendationID", bound=str)
-PlaceID = TypeVar("PlaceID", bound=str)
-
-
-class PlaceView(DomainEntity[PlaceID]):
-    id: PlaceID = Field(..., kw_only=True)
-    name: str = Field(..., kw_only=True)
-    last_update: datetime = Field(..., kw_only=True)
-    location: Location
-    total_reviews: int
 
 
 class Recommendation(AggregateRoot[RecommendationID]):
     id: Optional[RecommendationID] = Field(..., kw_only=True)
-    place: PlaceView = Field(..., kw_only=True)
+    place: PlaceViewProjection = Field(..., kw_only=True)
     score: Score = Field(None, ge=0, le=1)
+    is_enabled: bool = Field(False, kw_only=True)
 
     @classmethod
-    def create(cls, *, place: PlaceView):
+    def create(cls, *, place: PlaceViewProjection):
         aggregate = cls(
             id=None,
             place=None,
@@ -53,7 +45,7 @@ class Recommendation(AggregateRoot[RecommendationID]):
 
         return aggregate
 
-    def update_place(self, place: PlaceView):
+    def update_place(self, place: PlaceViewProjection):
         if place is None:
             raise ValidationError("place cannot be None")
 

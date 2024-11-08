@@ -1,6 +1,8 @@
 from src.module.common.domain.events import DomainEvent
+from src.module.recommendation.domain.recommendation.projections import (
+    PlaceViewProjection,
+)
 from src.module.recommendation.domain.recommendation.recommendation import (
-    PlaceView,
     Recommendation,
 )
 
@@ -14,8 +16,8 @@ class UpdatedRecommendationDomainEvent(DomainEvent):
 
 
 class UpdatedRecommendationPlaceViewDomainEvent(UpdatedRecommendationDomainEvent):
-    old_place: PlaceView
-    new_place: PlaceView
+    old_place: PlaceViewProjection
+    new_place: PlaceViewProjection
 
 
 class UpdatedRecommendationScoreDomainEvent(UpdatedRecommendationDomainEvent):

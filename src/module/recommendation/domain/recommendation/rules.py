@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 
 from src.module.common.domain.rules import Rule, RuleError
-from src.module.recommendation.domain.recommendation.recommendation import PlaceView
+from src.module.recommendation.domain.recommendation.projections import (
+    PlaceViewProjection,
+)
 
 
 class DifferentIDPlaceWhenUpdateRuleError(RuleError):
@@ -10,8 +12,8 @@ class DifferentIDPlaceWhenUpdateRuleError(RuleError):
 
 @dataclass(frozen=True)
 class UpdatedPlaceMustBeSameID(Rule):
-    current_place: PlaceView
-    new_place: PlaceView
+    current_place: PlaceViewProjection
+    new_place: PlaceViewProjection
 
     def __call__(self):
         if self.current_place is not None and self.current_place.id != self.new_place.id:
@@ -26,13 +28,14 @@ class OlderPlaceWhenUpdateRuleError(RuleError):
 
 @dataclass(frozen=True)
 class UpdatedPlaceMustBeNewer(Rule):
-    current_place: PlaceView
-    new_place: PlaceView
+    current_place: PlaceViewProjection
+    new_place: PlaceViewProjection
 
     def __call__(self):
-        if self.current_place is not None and self.current_place.last_update > self.new_place.last_update:
+        if self.current_place is not None and self.current_place.projected_at > self.new_place.projected_at:
             raise OlderPlaceWhenUpdateRuleError(
-                f"Place({self.current_place.id}); current_update: {self.new_place.last_update}, new_update: {self.current_place.last_update}"
+                f"Place({self.current_place.id}); current_update: {self.new_place.projected_at}, "
+                f"new_update: {self.current_place.projected_at}"
             )
 
 
