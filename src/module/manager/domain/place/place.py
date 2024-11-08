@@ -13,10 +13,6 @@ from src.module.manager.domain.place.events import (
     CreatedPlaceDomainEvent,
     ReviewAddedDomainEvent,
 )
-from src.module.manager.domain.place.projections import (
-    PlaceProjection,
-    ReviewProjection,
-)
 
 ReviewID = TypeVar("ReviewID", bound=uuid.UUID)
 PlaceID = TypeVar("PlaceID", bound=str)
@@ -43,7 +39,7 @@ class Place(AggregateRoot[PlaceID]):
 
         place = Place(id=None, name=name, location=location, category=CategoryProjection.from_entity(category))
 
-        place._add_event(CreatedPlaceDomainEvent(new_place=PlaceProjection.from_entity(place)))
+        place._add_event(CreatedPlaceDomainEvent(new_place=place.model_copy(deep=True)))
 
         return place
 
@@ -57,8 +53,8 @@ class Place(AggregateRoot[PlaceID]):
 
         self._add_event(
             ReviewAddedDomainEvent(
-                place_projection=PlaceProjection.from_entity(self),
-                added_review=ReviewProjection.from_entity(review),
+                place=self.model_copy(deep=True),
+                added_review=review.model_copy(deep=True),
             )
         )
 

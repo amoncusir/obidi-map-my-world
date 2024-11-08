@@ -7,6 +7,10 @@ from src.module.manager.application.integration_event.events import (
     ReviewAddedApplicationEvent,
 )
 from src.module.manager.domain.place.events import ReviewAddedDomainEvent
+from src.module.manager.domain.place.projections import (
+    PlaceProjection,
+    ReviewProjection,
+)
 
 
 @dataclass
@@ -19,8 +23,8 @@ class PublishEventWhenReviewAddedDomainSubscriber(DomainEventSubscriber[ReviewAd
 
     async def handle_event(self, event: ReviewAddedDomainEvent):
         integration_event = ReviewAddedApplicationEvent(
-            place_projection=event.place_projection,
-            added_review=event.added_review,
+            place_projection=PlaceProjection.from_entity(event.place),
+            added_review=ReviewProjection.from_entity(event.added_review),
         )
 
         await self.integration_event_bus.async_publish(integration_event)

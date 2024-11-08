@@ -7,6 +7,7 @@ from src.module.manager.application.integration_event.events import (
     CreatedPlaceApplicationEvent,
 )
 from src.module.manager.domain.place.events import CreatedPlaceDomainEvent
+from src.module.manager.domain.place.projections import PlaceProjection
 
 
 @dataclass
@@ -19,9 +20,8 @@ class PublishEventWhenCreatedPlaceDomainSubscriber(DomainEventSubscriber[Created
         return CreatedPlaceDomainEvent
 
     async def handle_event(self, event: CreatedPlaceDomainEvent):
-        projection = event.new_place
         integration_event = CreatedPlaceApplicationEvent(
-            place_projection=projection,
+            place_projection=PlaceProjection.from_entity(event.new_place),
         )
 
         await self.integration_event_bus.async_publish(integration_event)
