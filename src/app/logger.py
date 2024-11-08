@@ -28,3 +28,13 @@ def configure_logger():
     project_logger.setLevel(DEBUG)
     project_logger.addHandler(handler)
     project_logger.propagate = False
+
+    # aio_pika_logger = getLogger('aio_pika')
+    # aio_pika_logger.setLevel(DEBUG)
+    # aio_pika_logger.addHandler(handler)
+    # aio_pika_logger.propagate = False
+
+    # aiormq_logger = getLogger('aiormq')
+    # aiormq_logger.setLevel(DEBUG)
+    # aiormq_logger.addHandler(handler)
+    # aiormq_logger.propagate = False
