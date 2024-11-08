@@ -1,8 +1,5 @@
 from src.module.common.application.event.integration import IntegrationEventSubscriber
-from src.module.manager.application.integration_event.events import (
-    CreatedPlaceApplicationEvent,
-    ReviewAddedApplicationEvent,
-)
+from src.module.manager import CreatedPlaceApplicationEvent, ReviewAddedApplicationEvent
 
 
 class CreatedPlaceIntegrationEventSubscriber(IntegrationEventSubscriber[CreatedPlaceApplicationEvent]):
