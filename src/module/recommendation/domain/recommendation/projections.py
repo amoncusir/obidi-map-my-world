@@ -1,6 +1,5 @@
+from dataclasses import dataclass
 from typing import Self, TypeVar
-
-from pydantic import Field
 
 from src.module.common.domain.projections import EntityProjection
 from src.module.common.domain.values import Location
@@ -9,11 +8,12 @@ from src.module.manager import PlaceProjection
 PlaceID = TypeVar("PlaceID", bound=str)
 
 
+@dataclass(frozen=True, kw_only=True)
 class PlaceViewProjection(EntityProjection[PlaceID]):
-    id: PlaceID = Field(..., kw_only=True)
-    name: str = Field(..., kw_only=True)
-    location: Location = Field(..., kw_only=True)
-    total_reviews: int = Field(..., kw_only=True)
+    id: PlaceID
+    name: str
+    location: Location
+    total_reviews: int
 
     @classmethod
     def from_entity(cls, entity: PlaceProjection) -> Self:

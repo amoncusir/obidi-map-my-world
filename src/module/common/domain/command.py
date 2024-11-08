@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from dataclasses import dataclass
 from datetime import datetime
 from logging import Logger, getLogger
 from typing import Type, TypeVar
@@ -6,9 +7,8 @@ from typing import Type, TypeVar
 from pydantic import BaseModel, ConfigDict
 
 
-class Command(BaseModel):
-    model_config = ConfigDict(frozen=True)
-
+@dataclass(frozen=True, kw_only=True)
+class Command:
     @classmethod
     @abstractmethod
     def name(cls) -> str: ...

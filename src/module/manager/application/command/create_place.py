@@ -15,6 +15,7 @@ class CreatePlaceInvalidCategoryIdError(DomainError):
     pass
 
 
+@dataclass(frozen=True, kw_only=True)
 class CreatePlace(Command):
     category_id: CategoryID
     place_name: str

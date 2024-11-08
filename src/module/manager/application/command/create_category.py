@@ -6,6 +6,7 @@ from src.module.manager.domain.category import Category, CategoryRepository
 from src.module.manager.domain.category.category import CategoryID
 
 
+@dataclass(frozen=True, kw_only=True)
 class CreateCategory(Command):
     category_name: str
 

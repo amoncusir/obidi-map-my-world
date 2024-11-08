@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from typing_extensions import Self
@@ -9,6 +10,7 @@ if TYPE_CHECKING:
     from src.module.manager.domain.category import Category
 
 
+@dataclass(frozen=True, kw_only=True)
 class CategoryProjection(EntityProjection[CategoryID]):
     name: str
 

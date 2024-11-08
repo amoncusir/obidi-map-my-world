@@ -1,18 +1,16 @@
 from abc import abstractmethod
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Type
-
-from pydantic import BaseModel, ConfigDict, Field
 
 from src.module.common.application.event.base import BaseEventSubscriber
 from src.module.common.domain.aggregates import AggregateRoot
 from src.module.common.utils import now
 
 
-class DomainEvent(BaseModel):
-    model_config = ConfigDict(frozen=True)
-
-    event_created_at: datetime = Field(default_factory=now)
+@dataclass(frozen=True, kw_only=True)
+class DomainEvent:
+    event_created_at: datetime = field(default_factory=now)
 
 
 class DomainEventSubscriber[Event: DomainEvent](BaseEventSubscriber[Event]):

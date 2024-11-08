@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Self
 
 from src.module.common.domain.projections import EntityProjection
@@ -9,6 +10,7 @@ if TYPE_CHECKING:
     from src.module.manager.domain.place.place import Review
 
 
+@dataclass(frozen=True, kw_only=True)
 class ReviewProjection(EntityProjection[str]):
     id: str
     rate: int
@@ -18,12 +20,13 @@ class ReviewProjection(EntityProjection[str]):
         return ReviewProjection(id=str(entity.id), projected_at=entity.updated_at, rate=entity.rate)
 
 
+@dataclass(frozen=True, kw_only=True)
 class PlaceProjection(EntityProjection[str]):
     id: str
     name: str
     location: "Location"
     category: CategoryProjection
-    reviews: list["ReviewProjection"]
+    reviews: list[ReviewProjection]
 
     @classmethod
     def from_entity(cls, entity: "Place") -> Self:

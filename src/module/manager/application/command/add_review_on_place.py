@@ -12,6 +12,7 @@ class AddReviewOnPlaceNotFoundError(DomainError):
     pass
 
 
+@dataclass(frozen=True, kw_only=True)
 class AddReviewOnPlace(Command):
     place_id: PlaceID
     rate: int
