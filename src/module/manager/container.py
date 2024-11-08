@@ -2,8 +2,12 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from pymongo.asynchronous.database import AsyncDatabase
 
+from src.app.utils import list_providers
 from src.module.common.application.event.domain_bus import DomainEventBus
 from src.module.common.application.event.integration_bus import IntegrationEventsBus
+from src.module.common.infrastructure.inmemory.domain_event_bus import (
+    InMemoryDomainEventBus,
+)
 from src.module.manager.application.command import CreatePlaceCommandHandler
 from src.module.manager.application.command.add_review_on_place import (
     AddReviewOnPlaceCommandHandler,
@@ -43,7 +47,7 @@ class Repository(DeclarativeContainer):
     category_repository = providers.Dependency(instance_of=CategoryRepository, default=mongo_category_repository)
 
 
-class DomainEventSubscriber(DeclarativeContainer):
+class DomainEventSubscribers(DeclarativeContainer):
     integration_event_bus = providers.Dependency(IntegrationEventsBus)
 
     publish_event_created_place = DomainEventSubscriberProvider(
@@ -78,8 +82,13 @@ class Command(DeclarativeContainer):
 class ManagerContainer(DeclarativeContainer):
     config = providers.Configuration()
     database = providers.Dependency(AsyncDatabase)
-    domain_event_bus = providers.Dependency(DomainEventBus)
     integration_event_bus = providers.Dependency(IntegrationEventsBus)
+
+    __self__ = providers.Self()
+
+    domain_event_bus = providers.Singleton(
+        InMemoryDomainEventBus, subscribers=providers.Factory(list_providers, __self__, DomainEventSubscriberProvider)
+    )
 
     repository = providers.Container(
         Repository,
@@ -87,7 +96,7 @@ class ManagerContainer(DeclarativeContainer):
     )
 
     domain_event_subscriber = providers.Container(
-        DomainEventSubscriber,
+        DomainEventSubscribers,
         integration_event_bus=integration_event_bus,
     )
 

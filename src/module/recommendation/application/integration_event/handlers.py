@@ -42,6 +42,7 @@ class CreatedPlaceIntegrationEventSubscriber(IntegrationEventSubscriber[CreatedP
         return "place.created"
 
 
+@dataclass
 class ReviewAddedIntegrationEventSubscriber(IntegrationEventSubscriber[ReviewAddedApplicationEvent]):
     """
     Subscription to ReviewAddedApplicationEvent.

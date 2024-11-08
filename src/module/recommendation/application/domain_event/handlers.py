@@ -17,7 +17,6 @@ from src.module.recommendation.domain.recommendation.repository import (
 )
 
 
-@dataclass
 class UpdateScoreWhenPlaceIsUpdatedDomainSubscriber(DomainEventSubscriber[UpdatedRecommendationPlaceViewDomainEvent]):
 
     score_evaluators: Tuple[ScoreEvaluator] = (ReviewCountScoreEvaluator(),)
@@ -50,10 +49,10 @@ class UpdateStatusWhenPlaceIsUpdatedDomainSubscriber(DomainEventSubscriber[Updat
         self._aggregate_events(recommendation)
 
 
+@dataclass
 class SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber(
     DomainEventSubscriber[UpdatedRecommendationScoreDomainEvent]
 ):
-
     recommendation_repository: RecommendationRepository
 
     @classmethod
