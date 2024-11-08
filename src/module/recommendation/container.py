@@ -62,13 +62,10 @@ class IntegrationEventSubscribers(DeclarativeContainer):
 class DomainEventSubscribers(DeclarativeContainer):
     repository = providers.DependenciesContainer()
 
-    # UpdateScoreWhenPlaceIsUpdatedDomainSubscriber
     update_score_when_place_is_updated = DomainEventSubscriberProvider(UpdateScoreWhenPlaceIsUpdatedDomainSubscriber)
 
-    # UpdateStatusWhenPlaceIsUpdatedDomainSubscriber
     update_status_when_place_is_updated = DomainEventSubscriberProvider(UpdateStatusWhenPlaceIsUpdatedDomainSubscriber)
 
-    # SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber
     save_updated_score_recommendation = DomainEventSubscriberProvider(
         SaveUpdatedScoreRecommendationIfDifferentDomainSubscriber,
         recommendation_repository=repository.recommendation_repository,
