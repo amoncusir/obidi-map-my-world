@@ -7,7 +7,6 @@ from typing_extensions import TypeVar
 from src.module.common.domain.aggregates import AggregateRoot
 from src.module.common.domain.entities import DomainEntity
 from src.module.common.domain.values import GenericUUID, Location
-from src.module.manager import CategoryProjection
 from src.module.manager.domain.category import Category
 from src.module.manager.domain.place.events import (
     CreatedPlaceDomainEvent,
@@ -27,7 +26,7 @@ class Place(AggregateRoot[PlaceID]):
     id: Optional[PlaceID] = Field(kw_only=True)
     name: str
     location: Location
-    category: CategoryProjection
+    category: Category
     reviews: List[Review] = Field(default_factory=list)
 
     @classmethod
@@ -37,7 +36,7 @@ class Place(AggregateRoot[PlaceID]):
         factory creation process, but in more complex domains, they will be a must.
         """
 
-        place = Place(id=None, name=name, location=location, category=CategoryProjection.from_entity(category))
+        place = Place(id=None, name=name, location=location, category=category)
 
         place._add_event(CreatedPlaceDomainEvent(place=place.duplicate()))
 

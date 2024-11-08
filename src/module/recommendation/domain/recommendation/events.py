@@ -1,18 +1,22 @@
+from typing import TYPE_CHECKING
+
 from src.module.common.domain.events import DomainEvent
 from src.module.recommendation.domain.recommendation.projections import (
     PlaceViewProjection,
 )
-from src.module.recommendation.domain.recommendation.recommendation import (
-    Recommendation,
-)
+
+if TYPE_CHECKING:
+    from src.module.recommendation.domain.recommendation.recommendation import (
+        Recommendation,
+    )
 
 
 class CreatedRecommendationDomainEvent(DomainEvent):
-    recommendation: Recommendation
+    recommendation: "Recommendation"
 
 
 class UpdatedRecommendationDomainEvent(DomainEvent):
-    recommendation: Recommendation
+    recommendation: "Recommendation"
 
 
 class UpdatedRecommendationPlaceViewDomainEvent(UpdatedRecommendationDomainEvent):

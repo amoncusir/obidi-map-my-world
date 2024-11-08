@@ -12,10 +12,10 @@ from src.module.common.infrastructure.mongodb.document import (
     Document,
     PrincipalDocument,
 )
-from src.module.manager import CategoryProjection
 from src.module.manager.domain.place import Place, PlaceRepository
 from src.module.manager.domain.place.place import PlaceID, Review
 from src.module.manager.domain.place.repository import InvalidUpdateOperation
+from src.module.manager.infrastructure.mongodb.category_repository import CategoryDTO
 
 logger = getLogger(__name__)
 
@@ -60,29 +60,12 @@ class ReviewDTO(Document):
         )
 
 
-class CategoryProjectionDTO(Document):
-    id: str
-    projected_at: datetime
-    name: str
-
-    @classmethod
-    def from_domain(cls, domain: CategoryProjection) -> "CategoryProjectionDTO":
-        return CategoryProjectionDTO(
-            id=domain.id,
-            projected_at=domain.projected_at,
-            name=domain.name,
-        )
-
-    def to_domain(self) -> CategoryProjection:
-        return CategoryProjection(id=self.id, projected_at=self.projected_at, name=self.name)
-
-
 class PlaceDTO(PrincipalDocument[Place]):
     created_at: datetime
     updated_at: datetime
     name: str
     location: GeoPoint
-    category: CategoryProjectionDTO
+    category: CategoryDTO
     reviews: List[ReviewDTO]
 
     @classmethod
@@ -99,7 +82,7 @@ class PlaceDTO(PrincipalDocument[Place]):
             updated_at=domain.updated_at,
             name=domain.name,
             location=GeoPoint.from_location(domain.location),
-            category=CategoryProjectionDTO.from_domain(domain.category),
+            category=CategoryDTO.from_domain(domain.category),
             reviews=[ReviewDTO.from_domain(r) for r in domain.reviews],
         )
 

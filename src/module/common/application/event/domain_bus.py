@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class DomainEventBus:
 
     @abstractmethod
-    async def async_process(self, events: List[DomainEvent]): ...
+    async def async_process(self, events: List["DomainEvent"]): ...
 
-    async def async_process_aggregate(self, aggregate: AggregateRoot):
+    async def async_process_aggregate(self, aggregate: "AggregateRoot"):
         await self.async_process(aggregate.pop_events())

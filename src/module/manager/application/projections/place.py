@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING, Self
 
 from src.module.common.domain.projections import EntityProjection
+from src.module.manager.application.projections.category import CategoryProjection
 
 if TYPE_CHECKING:
     from src.module.common.domain.values import Location
-    from src.module.manager import CategoryProjection
     from src.module.manager.domain.place import Place
     from src.module.manager.domain.place.place import Review
 
@@ -21,9 +21,9 @@ class ReviewProjection(EntityProjection[str]):
 class PlaceProjection(EntityProjection[str]):
     id: str
     name: str
-    location: Location
+    location: "Location"
     category: CategoryProjection
-    reviews: list[ReviewProjection]
+    reviews: list["ReviewProjection"]
 
     @classmethod
     def from_entity(cls, entity: "Place") -> Self:
@@ -32,6 +32,6 @@ class PlaceProjection(EntityProjection[str]):
             projected_at=entity.updated_at,
             name=entity.name,
             location=entity.location,
-            category=entity.category,
+            category=CategoryProjection.from_entity(entity.category),
             reviews=[ReviewProjection.from_entity(r) for r in entity.reviews],
         )
