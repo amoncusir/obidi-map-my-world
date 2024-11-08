@@ -2,7 +2,7 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
 from src.module.providers import IntegrationEventSubscriberProvider
-from src.module.recommendation.application.integration_events.handlers import (
+from src.module.recommendation.application.integration_event.handlers import (
     ReviewAddedIntegrationEventSubscriber,
 )
 

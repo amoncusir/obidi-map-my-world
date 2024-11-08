@@ -7,7 +7,7 @@ def build_celery(settings: CelerySettings) -> Celery:
     instance = Celery(
         "worker",
         include=[
-            "src.module.recommendation.application.integration_events.handlers",
+            "src.module.recommendation.application.integration_event.handlers",
         ],
     )
 

@@ -1,5 +1,5 @@
 from src.module.common.application.event.integration import IntegrationEventSubscriber
-from src.module.manager.application.integration_events.events import (
+from src.module.manager.application.integration_event.events import (
     ReviewAddedApplicationEvent,
 )
 

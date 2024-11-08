@@ -3,7 +3,7 @@ from typing import Type
 
 from src.module.common.application.event.integration_bus import IntegrationEventsBus
 from src.module.common.domain.events import DomainEventSubscriber
-from src.module.manager.application.integration_events.events import (
+from src.module.manager.application.integration_event.events import (
     CreatedPlaceApplicationEvent,
 )
 from src.module.manager.domain.place.events import CreatedPlaceDomainEvent
