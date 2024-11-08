@@ -1,5 +1,6 @@
 import logging
 from asyncio import TaskGroup
+from collections import deque
 from functools import singledispatchmethod
 from logging import getLogger
 from typing import List, Type
@@ -39,11 +40,27 @@ class InMemoryDomainEventBus(DomainEventBus):
     def _(self, event: DomainEvent) -> List[DomainEventSubscriber]:
         return self.find_subscribers(type(event))
 
-    async def async_trigger(self, event: DomainEvent):
-        logger.debug("Event triggered: %s", repr(event))
+    async def async_process(self, events: List[DomainEvent]):
+        logger.debug("Event triggered: %s", repr(events))
+        queue = deque(events)
+        processed_events = 0
 
+        while len(queue) > 0:
+            event = queue.popleft()
+            processed_events += 1
+
+            await self._handler_event(event, queue)
+
+        logger.debug("Processed %d events", processed_events)
+
+    async def _handler_event(self, event: DomainEvent, queue: deque[DomainEvent]):
         subscribers: List[DomainEventSubscriber] = self.find_subscribers(event)
 
         async with TaskGroup() as task_group:
             for subscriber in subscribers:
-                task_group.create_task(subscriber(event))
+                task_group.create_task(_handler_subscriber(event, subscriber, queue))
+
+
+async def _handler_subscriber(event: DomainEvent, subscriber: DomainEventSubscriber, queue: deque[DomainEvent]):
+    new_events = await subscriber(event)
+    queue.extend(new_events)
