@@ -22,11 +22,7 @@ class IntegrationEvent(DictSerializable):
 class IntegrationEventSubscriber[Event: IntegrationEvent](BaseEventSubscriber[Event]):
 
     async def __call__(self, dict_event: Any):
-        print("Received Event")
-        print(dict_event)
         event = self.event_type().from_dict(dict_event)
-        print("Created real event from dict")
-        print(event)
         return await super().__call__(event)
 
     @abstractmethod
