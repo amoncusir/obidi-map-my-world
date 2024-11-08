@@ -10,7 +10,11 @@ class EntityProjection[ID](BaseModel):
     model_config = ConfigDict(frozen=True)
 
     id: ID = Field(..., kw_only=True)
-    projected_at: DateTime = Field(..., kw_only=True)
+    projected_at: DateTime = Field(
+        ...,
+        kw_only=True,
+        description="Projection time. Must be the datetime of the last modification for " "the object wants to project",
+    )
 
     def __eq__(self, other):
         if not isinstance(other, EntityProjection):
