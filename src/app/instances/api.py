@@ -23,5 +23,8 @@ async def start(_):
 
     yield
 
+    application.shutdown()
+    await application.broker.close()
+
 
 api = application.api(lifespan=start)
