@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from datetime import datetime
 from logging import Logger, getLogger
-from typing import Any, Type
+from typing import Any
 
 
 class BaseEventSubscriber[Event: Any]:
@@ -11,7 +11,7 @@ class BaseEventSubscriber[Event: Any]:
         start = datetime.now()
         result = await self.handle_event(event)
 
-        self.log.debug("Handled Event on time (%s): %s", datetime.now() - start, repr(event))
+        self.log.debug("Handled Event %s, time (%s)", event.__class__.__name__, datetime.now() - start)
 
         return result
 
