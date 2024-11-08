@@ -4,7 +4,6 @@ from faststream.rabbit import RabbitBroker
 
 from src.app.container import MainContainer
 from src.app.fast_api import build_fastapi
-from src.app.fast_stream import build_faststream
 from src.app.utils import Singleton
 from src.module.common.application.command_bus import CommandBus
 
@@ -19,13 +18,11 @@ class Application(metaclass=Singleton):
         self.container = MainContainer()
         self.container.config.from_yaml(config_path, required=True)
 
-    async def start(self):
+    def start(self):
         self.container.init_resources()
-        await self.broker.start()
 
-    async def shutdown(self):
+    def shutdown(self):
         self.container.shutdown_resources()
-        await self.broker.close()
 
     @classmethod
     def remove_instance(cls):
@@ -48,12 +45,8 @@ class Application(metaclass=Singleton):
         return self.container.celery.celery()
 
     def api(self, **kwargs):
-
         return build_fastapi(
             title=self.container.config.name(),
             debug=self.debug,
             **kwargs,
         )
-
-    def faststream(self):
-        return build_faststream(broker=self.container.faststream.broker)
