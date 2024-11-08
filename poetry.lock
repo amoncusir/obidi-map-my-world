@@ -313,6 +313,19 @@ files = [
 toml = ["tomli"]
 
 [[package]]
+name = "dacite"
+version = "1.8.1"
+description = "Simple creation of data classes from dictionaries."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "dacite-1.8.1-py3-none-any.whl", hash = "sha256:cc31ad6fdea1f49962ea42db9421772afe01ac5442380d9a99fcf3d188c61afe"},
+]
+
+[package.extras]
+dev = ["black", "coveralls", "mypy", "pre-commit", "pylint", "pytest (>=5)", "pytest-benchmark", "pytest-cov"]
+
+[[package]]
 name = "dependency-injector"
 version = "4.43.0"
 description = "Dependency injection framework for Python"
@@ -2061,4 +2074,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "64a8c8fafa02bd3284e180979695090e241a67d5433115fd0992ea0839bcafb5"
+content-hash = "a51e348bbfd7518b4102f874cdddffcdee8bb58f51181b694eb2140b8babd5e4"
