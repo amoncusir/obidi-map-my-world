@@ -20,7 +20,6 @@ class ReviewProjection(EntityProjection[str]):
 
 class PlaceProjection(EntityProjection[str]):
     id: str
-    projected_at: datetime
     name: str
     location: Location
     category: CategoryProjection
