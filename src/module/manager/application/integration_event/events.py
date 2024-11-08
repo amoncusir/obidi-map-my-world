@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any, Dict, Self
 
 from src.module.common.application.event.integration import IntegrationEvent
 from src.module.manager.application.projections.place import (

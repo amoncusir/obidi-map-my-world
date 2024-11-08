@@ -10,6 +10,10 @@ class GenericUUID(uuid.UUID):
         return cls(int=uuid.uuid4().int)
 
     @classmethod
+    def next_id_str(cls) -> str:
+        return str(cls.next_id())
+
+    @classmethod
     def __get_validators__(cls):
         yield cls.validate
 

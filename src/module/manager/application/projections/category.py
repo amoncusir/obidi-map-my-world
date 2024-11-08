@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 from typing_extensions import Self
 
 from src.module.common.domain.projections import EntityProjection
-from src.module.manager.domain.category.category import CategoryID
 
 if TYPE_CHECKING:
     from src.module.manager.domain.category import Category
 
 
 @dataclass(frozen=True, kw_only=True)
-class CategoryProjection(EntityProjection[CategoryID]):
+class CategoryProjection(EntityProjection[str]):
+    id: str
     name: str
 
     @classmethod

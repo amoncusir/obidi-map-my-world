@@ -25,7 +25,7 @@ RecommendationID = TypeVar("RecommendationID", bound=str)
 
 class Recommendation(AggregateRoot[RecommendationID]):
     id: Optional[RecommendationID] = Field(..., kw_only=True)
-    place: PlaceViewProjection = Field(..., kw_only=True)
+    place: PlaceViewProjection = Field(None, kw_only=True)
     score: Score = Field(None, ge=0, le=1)
     state: bool = Field(False, kw_only=True)
 
@@ -35,9 +35,8 @@ class Recommendation(AggregateRoot[RecommendationID]):
 
     @classmethod
     def create(cls, *, place: PlaceViewProjection):
-        aggregate = cls(
+        aggregate = Recommendation(
             id=None,
-            place=None,
         )
 
         aggregate._add_event(
@@ -72,8 +71,8 @@ class Recommendation(AggregateRoot[RecommendationID]):
         self._add_event(
             UpdatedRecommendationPlaceViewDomainEvent(
                 recommendation=self.duplicate(),
-                old_place=current_place.duplicate(),
-                new_place=self.place.duplicate(),
+                old_place=current_place if current_place is not None else None,
+                new_place=self.place,
             )
         )
 

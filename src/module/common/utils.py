@@ -1,17 +1,24 @@
-from abc import abstractmethod
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
-from typing import Any, Dict, Self
+from typing import Any, Dict, Final, Self
+
+from dacite import Config, from_dict
+
+from src.module.common.domain.values import Location
 
 
 def now() -> datetime:
     return datetime.now(tz=UTC)
 
 
+@dataclass(frozen=True)
 class DictSerializable:
 
     @classmethod
-    @abstractmethod
-    def from_dict(cls, entity: Any) -> Self: ...
+    def from_dict(cls, entity: Any) -> Self:
+        return from_dict(
+            cls, entity, config=Config(type_hooks={datetime: datetime.fromisoformat, Location: Location.model_validate})
+        )
 
-    @abstractmethod
-    def to_dict(self) -> Dict[str, Any]: ...
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)

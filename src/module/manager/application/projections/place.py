@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Self
 
 from src.module.common.domain.projections import EntityProjection
+from src.module.common.domain.values import Location
 from src.module.manager.application.projections.category import CategoryProjection
 
 if TYPE_CHECKING:
-    from src.module.common.domain.values import Location
     from src.module.manager.domain.place import Place
     from src.module.manager.domain.place.place import Review
 
@@ -24,7 +24,7 @@ class ReviewProjection(EntityProjection[str]):
 class PlaceProjection(EntityProjection[str]):
     id: str
     name: str
-    location: "Location"
+    location: Location
     category: CategoryProjection
     reviews: list[ReviewProjection]
 

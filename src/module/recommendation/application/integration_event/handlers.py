@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Type
 
 from src.module.common.application.event.domain_bus import DomainEventBus
 from src.module.common.application.event.integration import IntegrationEventSubscriber
@@ -23,6 +24,10 @@ class CreatedPlaceIntegrationEventSubscriber(IntegrationEventSubscriber[CreatedP
 
     domain_event_bus: DomainEventBus
     recommendation_repository: RecommendationRepository
+
+    @classmethod
+    def event_type(cls) -> Type[CreatedPlaceApplicationEvent]:
+        return CreatedPlaceApplicationEvent
 
     async def handle_event(self, event: CreatedPlaceApplicationEvent):
         # FIXME: Move that logic to a command!
@@ -51,6 +56,10 @@ class ReviewAddedIntegrationEventSubscriber(IntegrationEventSubscriber[ReviewAdd
 
     domain_event_bus: DomainEventBus
     recommendation_repository: RecommendationRepository
+
+    @classmethod
+    def event_type(cls) -> Type[ReviewAddedApplicationEvent]:
+        return ReviewAddedApplicationEvent
 
     async def handle_event(self, event: ReviewAddedApplicationEvent):
         # FIXME: Move that logic to a command!

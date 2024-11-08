@@ -5,12 +5,10 @@ from src.module.common.domain.projections import EntityProjection
 from src.module.common.domain.values import Location
 from src.module.manager import PlaceProjection
 
-PlaceID = TypeVar("PlaceID", bound=str)
-
 
 @dataclass(frozen=True, kw_only=True)
-class PlaceViewProjection(EntityProjection[PlaceID]):
-    id: PlaceID
+class PlaceViewProjection(EntityProjection[str]):
+    id: str
     name: str
     location: Location
     total_reviews: int
