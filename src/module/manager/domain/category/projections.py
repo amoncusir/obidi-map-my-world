@@ -10,4 +10,4 @@ class CategoryProjection(EntityProjection[CategoryID]):
 
     @classmethod
     def from_entity(cls, entity: Category) -> Self:
-        return CategoryProjection(id=entity.id, created_at=entity.updated_at, name=entity.name)
+        return CategoryProjection(id=entity.id, projected_at=entity.updated_at, name=entity.name)

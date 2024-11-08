@@ -62,19 +62,19 @@ class ReviewDTO(Document):
 
 class CategoryProjectionDTO(Document):
     id: str
-    created_at: datetime
+    projected_at: datetime
     name: str
 
     @classmethod
     def from_domain(cls, domain: CategoryProjection) -> "CategoryProjectionDTO":
         return CategoryProjectionDTO(
             id=domain.id,
-            created_at=domain.created_at,
+            projected_at=domain.projected_at,
             name=domain.name,
         )
 
     def to_domain(self) -> CategoryProjection:
-        return CategoryProjection(id=self.id, created_at=self.created_at, name=self.name)
+        return CategoryProjection(id=self.id, projected_at=self.projected_at, name=self.name)
 
 
 class PlaceDTO(PrincipalDocument[Place]):

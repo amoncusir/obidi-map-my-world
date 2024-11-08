@@ -26,7 +26,7 @@ class PublishEventWhenCreatedPlaceDomainSubscriber(DomainEventSubscriber[Created
     def event_type(cls) -> Type[CreatedPlaceDomainEvent]:
         return CreatedPlaceDomainEvent
 
-    async def handle_event(self, event: CreatedPlaceDomainEvent):
+    async def subscription_event(self, event: CreatedPlaceDomainEvent):
         integration_event = CreatedPlaceApplicationEvent(
             place_projection=PlaceProjection.from_entity(event.place),
         )
@@ -42,7 +42,7 @@ class PublishEventWhenReviewAddedDomainSubscriber(DomainEventSubscriber[ReviewAd
     def event_type(cls) -> Type[ReviewAddedDomainEvent]:
         return ReviewAddedDomainEvent
 
-    async def handle_event(self, event: ReviewAddedDomainEvent):
+    async def subscription_event(self, event: ReviewAddedDomainEvent):
         integration_event = ReviewAddedApplicationEvent(
             place_projection=PlaceProjection.from_entity(event.place),
             added_review=ReviewProjection.from_entity(event.added_review),

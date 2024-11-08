@@ -15,12 +15,12 @@ class ReviewProjection(EntityProjection[str]):
 
     @classmethod
     def from_entity(cls, entity: "Review") -> Self:
-        return ReviewProjection(id=str(entity.id), created_at=entity.updated_at, rate=entity.rate)
+        return ReviewProjection(id=str(entity.id), projected_at=entity.updated_at, rate=entity.rate)
 
 
 class PlaceProjection(EntityProjection[str]):
     id: str
-    created_at: datetime
+    projected_at: datetime
     name: str
     location: Location
     category: CategoryProjection
@@ -30,7 +30,7 @@ class PlaceProjection(EntityProjection[str]):
     def from_entity(cls, entity: "Place") -> Self:
         return PlaceProjection(
             id=str(entity.id),
-            created_at=entity.updated_at,
+            projected_at=entity.updated_at,
             name=entity.name,
             location=entity.location,
             category=entity.category,
