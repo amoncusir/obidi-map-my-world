@@ -1,6 +1,5 @@
 from typing import List
 
-from faststream import FastStream
 from faststream.rabbit import (
     ExchangeType,
     RabbitBroker,
@@ -14,18 +13,13 @@ from src.config.fast_stream import FastStreamSettings
 from src.module.common.application.event.integration import IntegrationEventSubscriber
 
 
-def build_faststream(broker: RabbitBroker) -> FastStream:
-    app = FastStream(broker)
-    return app
-
-
 def build_router(exchange: RabbitExchange, subscribers: List[IntegrationEventSubscriber]) -> RabbitRouter:
     router = RabbitRouter(handlers=(build_route_handler(exchange, sub) for sub in subscribers))
     return router
 
 
 def build_route_handler(exchange: RabbitExchange, subs: IntegrationEventSubscriber) -> RabbitRoute:
-    queue_name = f"event.{subs.routing_key()}"
+    queue_name = f"event.{subs.name()}"
     queue = RabbitQueue(queue_name, routing_key=subs.routing_key(), auto_delete=True)
 
     return RabbitRoute(
